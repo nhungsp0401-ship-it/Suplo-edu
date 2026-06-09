@@ -14,6 +14,7 @@
   --border:#E8EDF5;--shadow:0 4px 20px rgba(0,0,0,.09);--r:20px
 }
 html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
+button,[onclick]{touch-action:manipulation;cursor:pointer}
 
 /* ===== APP SHELL ===== */
 #app{max-width:430px;margin:0 auto;height:100vh;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.35)}
@@ -21,8 +22,9 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 /* ===== SCREENS ===== */
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);
   transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease;
-  transform:translateX(100%);opacity:0;pointer-events:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.screen.active{transform:translateX(0)!important;opacity:1!important;pointer-events:all}
+  transform:translateX(100%);opacity:0;pointer-events:none;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  will-change:transform,opacity}
+.screen.active{transform:translateX(0);opacity:1;pointer-events:all}
 
 /* ===== ONBOARDING ===== */
 #screen-onboard{background:linear-gradient(160deg,#667eea 0%,#764ba2 60%,#F06595 100%);align-items:center;justify-content:flex-start;padding:0;overflow-y:auto}
@@ -797,24 +799,37 @@ function _transition(id, dir){
   const to   = document.getElementById('screen-'+id);
   if(!to || from===to) return;
 
+  // Position 'to' off-screen with no transition
   to.style.transition='none';
   to.style.transform = dir==='right' ? 'translateX(100%)' : 'translateX(-100%)';
   to.style.opacity='0';
+  to.style.pointerEvents='none';
   to.classList.remove('active');
 
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    // Slide 'to' into view
     to.style.transition='';
-    to.style.transform='';
-    to.style.opacity='';
+    to.style.transform='translateX(0)';
+    to.style.opacity='1';
+    to.style.pointerEvents='all';
     to.classList.add('active');
 
+    // Exit 'from' immediately (inline wins since no !important on active class)
     if(from){
+      from.style.pointerEvents='none';
       from.style.transform = dir==='right' ? 'translateX(-30%)' : 'translateX(30%)';
       from.style.opacity='0';
-      from.addEventListener('transitionend', ()=>{
+
+      const cleanup = ()=>{
         from.classList.remove('active');
-        from.style.transform=''; from.style.opacity='';
-      }, {once:true});
+        from.style.transition='none';
+        from.style.transform='translateX(100%)';
+        from.style.opacity='0';
+        from.style.pointerEvents='none';
+        requestAnimationFrame(()=>{ from.style.transition=''; });
+      };
+      from.addEventListener('transitionend', cleanup, {once:true});
+      setTimeout(cleanup, 400); // fallback if transitionend doesn't fire
     }
   }));
 
@@ -1383,39 +1398,40 @@ function buildWorksheetHTML(){
 window.addEventListener('load',()=>{
   loadVoices();
 
+  // Hide all screens first, no animation
+  document.querySelectorAll('.screen').forEach(s=>{
+    s.style.transition='none';
+    s.style.transform='translateX(100%)';
+    s.style.opacity='0';
+    s.style.pointerEvents='none';
+    s.classList.remove('active');
+  });
+
   if(P.setupDone){
-    // Skip onboarding, show home
-    document.getElementById('screen-onboard').classList.remove('active');
-    document.getElementById('screen-onboard').style.transform='translateX(-100%)';
-    document.getElementById('screen-onboard').style.opacity='0';
-    document.getElementById('screen-home').classList.add('active');
-    document.getElementById('screen-home').style.transform='translateX(0)';
-    document.getElementById('screen-home').style.opacity='1';
     currentScreenId='home';
+    const el=document.getElementById('screen-home');
+    el.style.transform='translateX(0)';
+    el.style.opacity='1';
+    el.style.pointerEvents='all';
+    el.classList.add('active');
     updateHomeUI();
   } else {
-    // Show onboarding
     currentScreenId='onboard';
-    document.getElementById('screen-onboard').classList.add('active');
-    document.getElementById('screen-onboard').style.transform='translateX(0)';
-    document.getElementById('screen-onboard').style.opacity='1';
-    // Init age preview
+    const el=document.getElementById('screen-onboard');
+    el.style.transform='translateX(0)';
+    el.style.opacity='1';
+    el.style.pointerEvents='all';
+    el.classList.add('active');
     document.getElementById('ob-preview-text').textContent = STAGE_NAMES[calcStage(obAgeY,obAgeM)];
   }
 
-  // Ensure non-active screens are off-screen
-  document.querySelectorAll('.screen').forEach(s=>{
-    if(!s.classList.contains('active')){
-      s.style.transform='translateX(100%)';
-      s.style.opacity='0';
-    }
+  // Re-enable transitions after initial paint
+  requestAnimationFrame(()=>{
+    document.querySelectorAll('.screen').forEach(s=>{ s.style.transition=''; });
   });
 });
 
-// Prevent double-tap zoom on iOS
-document.addEventListener('touchend', e=>{
-  if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT') e.preventDefault();
-}, {passive:false});
+// touch-action:manipulation in CSS handles double-tap zoom without blocking clicks
 </script>
 </body>
 </html>
