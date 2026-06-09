@@ -11,7 +11,7 @@
   --red:#FF6B6B;--teal:#4ECDC4;--yellow:#FFE66D;--green:#51CF66;
   --purple:#845EC2;--orange:#FF9F43;--blue:#339AF0;--pink:#F06595;
   --bg:#F0F4FF;--white:#FFF;--text:#2B3A4B;--muted:#8899AA;
-  --border:#E8EDF5;--shadow:0 4px 20px rgba(0,0,0,.09);--r:20px;--rs:12px
+  --border:#E8EDF5;--shadow:0 4px 20px rgba(0,0,0,.09);--r:20px
 }
 html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
 
@@ -22,13 +22,35 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 .screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);
   transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease;
   transform:translateX(100%);opacity:0;pointer-events:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
-.screen.active{transform:translateX(0);opacity:1;pointer-events:all}
-.screen.exit{transform:translateX(-30%);opacity:0}
+.screen.active{transform:translateX(0)!important;opacity:1!important;pointer-events:all}
+
+/* ===== ONBOARDING ===== */
+#screen-onboard{background:linear-gradient(160deg,#667eea 0%,#764ba2 60%,#F06595 100%);align-items:center;justify-content:flex-start;padding:0;overflow-y:auto}
+.ob-inner{width:100%;max-width:380px;margin:0 auto;padding:36px 22px 40px;display:flex;flex-direction:column;align-items:center;gap:0}
+.ob-logo{font-size:64px;animation:bob 2.4s ease-in-out infinite;margin-bottom:8px}
+.ob-title{font-size:26px;font-weight:900;color:#fff;text-align:center;line-height:1.3;margin-bottom:4px}
+.ob-sub{font-size:13px;color:rgba(255,255,255,.75);text-align:center;margin-bottom:28px}
+.ob-card{background:rgba(255,255,255,.97);border-radius:26px;padding:26px 22px;width:100%;box-shadow:0 10px 40px rgba(0,0,0,.22);margin-bottom:16px}
+.ob-label{font-size:13px;font-weight:800;color:var(--text);margin-bottom:8px;display:block}
+.ob-input{width:100%;border:2.5px solid var(--border);border-radius:14px;padding:14px 16px;font-size:16px;font-weight:700;color:var(--text);outline:none;transition:border-color .2s;background:#F8FAFF}
+.ob-input:focus{border-color:var(--blue)}
+.age-stepper{display:flex;align-items:center;gap:0;border:2.5px solid var(--border);border-radius:14px;overflow:hidden;background:#F8FAFF}
+.age-btn{width:54px;height:52px;border:none;background:none;font-size:26px;font-weight:900;cursor:pointer;color:var(--blue);display:flex;align-items:center;justify-content:center;transition:background .15s;flex-shrink:0}
+.age-btn:active{background:#E8F0FF}
+.age-val{flex:1;text-align:center;font-size:17px;font-weight:900;color:var(--text);padding:0 8px;line-height:52px}
+.school-chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.sch-chip{border:2.5px solid var(--border);border-radius:50px;padding:9px 14px;font-size:12.5px;font-weight:700;color:var(--muted);cursor:pointer;background:#F8FAFF;transition:all .18s}
+.sch-chip.on{border-color:var(--blue);background:#E8F4FF;color:var(--blue)}
+.ob-go{width:100%;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:18px;padding:20px;font-size:17px;font-weight:900;cursor:pointer;box-shadow:0 6px 24px rgba(102,126,234,.45);transition:transform .15s,box-shadow .15s;margin-top:4px}
+.ob-go:active{transform:scale(.97)}
+.ob-stage-preview{background:rgba(255,255,255,.18);border-radius:16px;padding:12px 16px;width:100%;margin-top:12px}
+.ob-st-lbl{font-size:11px;color:rgba(255,255,255,.7);font-weight:700;margin-bottom:4px}
+.ob-st-val{font-size:15px;font-weight:900;color:#fff}
 
 /* ===== BOTTOM NAV ===== */
 .bnav{display:flex;background:var(--white);border-top:1.5px solid var(--border);flex-shrink:0;position:sticky;bottom:0;z-index:10}
-.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 0 11px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.3px;transition:color .2s}
-.bnav-btn .ni{font-size:21px;margin-bottom:2px}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 0 11px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.3px;transition:color .2s;min-height:58px;justify-content:center}
+.bnav-btn .ni{font-size:22px;margin-bottom:2px}
 .bnav-btn.on{color:var(--blue)}
 
 /* ===== HOME ===== */
@@ -37,8 +59,10 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 .hero::after{content:'';position:absolute;bottom:-30px;left:10px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%}
 .hero-greet{font-size:13px;opacity:.8;margin-bottom:3px}
 .hero-name{font-size:24px;font-weight:900;margin-bottom:14px}
+.hero-row{display:flex;align-items:center;gap:10px}
 .stars-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.22);border-radius:50px;padding:7px 16px;backdrop-filter:blur(6px)}
 .stars-val{font-size:19px;font-weight:900}
+.streak-pill{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border-radius:50px;padding:7px 14px;backdrop-filter:blur(6px);font-size:14px;font-weight:800}
 .mascot{position:absolute;right:16px;bottom:0;font-size:78px;line-height:1;animation:bob 2.4s ease-in-out infinite}
 @keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 
@@ -55,11 +79,12 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 .sc-en{background:#F0FFF4}.sc-en .spf{background:var(--green)}
 .sc-vn{background:#FFF8E1}.sc-vn .spf{background:#DEAD00}
 .sc-lg{background:#F3F0FF}.sc-lg .spf{background:var(--purple)}
+.review-tag{position:absolute;top:10px;right:10px;background:#667eea;color:#fff;border-radius:50px;padding:2px 8px;font-size:9px;font-weight:800}
 
 .miss-list{padding:0 14px 14px}
-.miss-item{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:16px;padding:13px 14px;margin-bottom:10px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s}
+.miss-item{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:16px;padding:14px 14px;margin-bottom:10px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s;min-height:64px}
 .miss-item:active{transform:scale(.97)}
-.miss-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.miss-ico{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .miss-inf{flex:1}
 .miss-t{font-size:13.5px;font-weight:700;color:var(--text)}
 .miss-d{font-size:11.5px;color:var(--muted);margin-top:1px}
@@ -67,15 +92,19 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 
 /* ===== LESSON HEADER ===== */
 .les-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--white);border-bottom:1.5px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:5}
-.btn-back{width:38px;height:38px;border-radius:50%;border:none;background:#F0F4FF;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;flex-shrink:0}
+.btn-back{width:44px;height:44px;border-radius:50%;border:none;background:#F0F4FF;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;flex-shrink:0}
 .btn-back:active{transform:scale(.88);background:#DDE4F5}
 .lpbar{flex:1;height:8px;background:#EEF0F5;border-radius:4px;overflow:hidden}
 .lpfill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:4px;transition:width .5s ease}
 .lp-txt{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}
+.tts-btn{width:44px;height:44px;border-radius:50%;border:none;background:#F0F4FF;cursor:pointer;font-size:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s,background .2s}
+.tts-btn:active{transform:scale(.88)}
+.tts-btn.speaking{background:#E8F4FF;animation:pulse-tts 1s ease-in-out infinite}
+@keyframes pulse-tts{0%,100%{box-shadow:0 0 0 0 rgba(51,154,240,.4)}50%{box-shadow:0 0 0 8px rgba(51,154,240,0)}}
 
 /* ===== EXERCISE AREA ===== */
-.ex-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:22px 18px 28px;gap:18px;min-height:0}
-.ex-q{text-align:center;font-size:18px;font-weight:800;color:var(--text);line-height:1.4}
+.ex-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:22px 18px 28px;gap:16px;min-height:0}
+.ex-q{text-align:center;font-size:19px;font-weight:800;color:var(--text);line-height:1.45}
 .ex-hint{font-size:12.5px;color:var(--muted);text-align:center}
 
 /* count box */
@@ -104,19 +133,20 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 /* pattern */
 .pat-box{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%}
 .pat-item{font-size:34px}
-.pat-miss{width:50px;height:50px;border:3px dashed var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:22px;animation:pulse-bdr 1.5s ease-in-out infinite}
+.pat-miss{width:52px;height:52px;border:3px dashed var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:22px;animation:pulse-bdr 1.5s ease-in-out infinite}
 @keyframes pulse-bdr{0%,100%{border-color:var(--blue)}50%{border-color:var(--purple)}}
 
-/* options */
-.opts{display:grid;gap:10px;width:100%}
+/* options — BIGGER TOUCH TARGETS */
+.opts{display:grid;gap:11px;width:100%}
 .opts.c3{grid-template-columns:repeat(3,1fr)}
 .opts.c2{grid-template-columns:repeat(2,1fr)}
-.opt-btn{border:3px solid transparent;border-radius:16px;padding:14px 10px;font-size:18px;font-weight:800;cursor:pointer;background:var(--white);box-shadow:0 3px 12px rgba(0,0,0,.08);color:var(--text);transition:transform .12s,box-shadow .12s;display:flex;align-items:center;justify-content:center;gap:6px}
-.opt-btn:active{transform:scale(.93)}
-.opt-btn.ok{background:var(--green);border-color:var(--green);color:#fff;animation:ok-bounce .45s ease}
-.opt-btn.no{background:#FFE8E8;border-color:var(--red);animation:no-shake .45s ease}
-@keyframes ok-bounce{0%{transform:scale(1)}35%{transform:scale(1.12)}70%{transform:scale(.97)}100%{transform:scale(1.05)}}
-@keyframes no-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+.opt-btn{border:3px solid var(--border);border-radius:18px;padding:18px 10px;font-size:19px;font-weight:800;cursor:pointer;background:var(--white);box-shadow:0 5px 16px rgba(0,0,0,.09);color:var(--text);transition:transform .12s,box-shadow .12s,border-color .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-height:72px;width:100%;line-height:1.2}
+.opt-btn:hover{border-color:#C0CADF;transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.12)}
+.opt-btn:active{transform:scale(.91)!important;box-shadow:0 2px 8px rgba(0,0,0,.08)}
+.opt-btn.ok{background:linear-gradient(135deg,#51CF66,#40C057);border-color:#40C057;color:#fff;animation:ok-bounce .45s ease}
+.opt-btn.no{background:#FFF0F0;border-color:var(--red);color:var(--red);animation:no-shake .48s ease}
+@keyframes ok-bounce{0%{transform:scale(1)}35%{transform:scale(1.1)}70%{transform:scale(.97)}100%{transform:scale(1.04)}}
+@keyframes no-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-9px)}40%{transform:translateX(9px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
 
 /* ===== FEEDBACK OVERLAY ===== */
 #fb-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
@@ -141,8 +171,10 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 .comp-s:nth-child(3){animation-delay:.28s}
 @keyframes s-pop{from{transform:scale(0);opacity:0}70%{transform:scale(1.3)}to{transform:scale(1);opacity:1}}
 .comp-earned{color:rgba(255,255,255,.85);font-size:15px;margin-bottom:22px}
+.comp-btns{display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px}
 .comp-btn{background:#fff;color:#764ba2;border:none;border-radius:18px;padding:17px 38px;font-size:16px;font-weight:900;cursor:pointer;transition:transform .15s;box-shadow:0 6px 24px rgba(0,0,0,.2)}
 .comp-btn:active{transform:scale(.96)}
+.comp-btn.ws{background:rgba(255,255,255,.2);color:#fff;border:2px solid rgba(255,255,255,.4)}
 
 /* ===== ROADMAP ===== */
 .road-hero{background:linear-gradient(135deg,#F093FB,#F5576C);padding:22px 20px 28px;border-radius:0 0 34px 34px;color:#fff;text-align:center;flex-shrink:0}
@@ -197,75 +229,151 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 .sd.done{background:var(--green);color:#fff}
 .sd.today{background:var(--blue);color:#fff;box-shadow:0 0 0 3px rgba(51,154,240,.28)}
 
-.cta-btn{display:block;margin:6px 18px 14px;width:calc(100% - 36px);background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:18px;padding:17px;font-size:15.5px;font-weight:900;cursor:pointer;box-shadow:0 6px 22px rgba(102,126,234,.38);transition:transform .15s;text-align:center}
+.cta-btn{display:block;margin:6px 18px 10px;width:calc(100% - 36px);background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:18px;padding:18px;font-size:15.5px;font-weight:900;cursor:pointer;box-shadow:0 6px 22px rgba(102,126,234,.38);transition:transform .15s;text-align:center;min-height:58px}
 .cta-btn:active{transform:scale(.97)}
+.cta-btn.sec{background:#F0F4FF;color:var(--text);box-shadow:none;border:2px solid var(--border);margin-top:0}
 
 .tip-box{background:#FFF8E1;border-radius:12px;padding:11px 13px;font-size:12px;color:#856404;line-height:1.5;margin-top:10px}
 
-/* spacer for scrolling past bottom nav */
 .spacer{height:72px;flex-shrink:0}
+
+/* ===== STAGE INFO BANNER ===== */
+.stage-banner{background:linear-gradient(135deg,#667eea22,#764ba222);border:1.5px solid #667eea44;border-radius:16px;padding:12px 14px;margin:0 14px 14px;display:flex;align-items:center;gap:12px}
+.stage-banner .sb-ico{font-size:28px}
+.stage-banner .sb-inf{flex:1}
+.stage-banner .sb-title{font-size:13px;font-weight:800;color:var(--text)}
+.stage-banner .sb-sub{font-size:11px;color:var(--muted);margin-top:2px}
+
+/* ===== RESET LINK ===== */
+.reset-link{text-align:center;font-size:11.5px;color:var(--muted);padding:8px 0 4px;cursor:pointer;text-decoration:underline;text-underline-offset:2px}
+
+/* ===== WORKSHEET BTN ===== */
+.ws-fab{position:fixed;bottom:80px;right:18px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#F093FB,#F5576C);border:none;cursor:pointer;font-size:22px;box-shadow:0 4px 18px rgba(240,93,251,.4);z-index:20;display:none;align-items:center;justify-content:center;transition:transform .15s}
+.ws-fab:active{transform:scale(.9)}
+.ws-fab.show{display:flex}
 </style>
 </head>
 <body>
 <div id="app">
 
+<!-- ============ ONBOARD ============ -->
+<div class="screen active" id="screen-onboard">
+  <div class="ob-inner">
+    <div class="ob-logo">🦊</div>
+    <div class="ob-title">Suplo Edu</div>
+    <div class="ob-sub">Học vui — Thi giỏi các trường trọng điểm Hà Nội</div>
+
+    <div class="ob-card">
+      <label class="ob-label">👶 Tên của bé</label>
+      <input class="ob-input" type="text" id="ob-name" placeholder="Ví dụ: Minh Anh" maxlength="20">
+    </div>
+
+    <div class="ob-card" style="margin-bottom:16px">
+      <label class="ob-label">🎂 Tuổi của bé</label>
+      <div style="display:flex;gap:12px;margin-bottom:14px">
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:700">Tuổi</div>
+          <div class="age-stepper">
+            <button class="age-btn" onclick="stepAge('y',-1)">−</button>
+            <div class="age-val" id="ob-y">3</div>
+            <button class="age-btn" onclick="stepAge('y',1)">+</button>
+          </div>
+        </div>
+        <div style="flex:1">
+          <div style="font-size:11px;color:var(--muted);margin-bottom:5px;font-weight:700">Tháng</div>
+          <div class="age-stepper">
+            <button class="age-btn" onclick="stepAge('m',-1)">−</button>
+            <div class="age-val" id="ob-m">6</div>
+            <button class="age-btn" onclick="stepAge('m',1)">+</button>
+          </div>
+        </div>
+      </div>
+
+      <label class="ob-label" style="margin-top:6px">🏫 Trường mục tiêu (tuỳ chọn)</label>
+      <div class="school-chips">
+        <div class="sch-chip" data-sch="ns" onclick="togChip(this)">🎓 Nguyễn Siêu</div>
+        <div class="sch-chip" data-sch="nscg" onclick="togChip(this)">⭐ Ngôi Sao CG</div>
+        <div class="sch-chip" data-sch="dtd" onclick="togChip(this)">🌸 Đoàn Thị Điểm</div>
+      </div>
+    </div>
+
+    <div class="ob-stage-preview" id="ob-preview">
+      <div class="ob-st-lbl">📊 Chương trình học phù hợp</div>
+      <div class="ob-st-val" id="ob-preview-text">Giai đoạn 1 — Nền tảng nhận thức</div>
+    </div>
+
+    <button class="ob-go" onclick="finishOnboard()" style="margin-top:18px">Bắt đầu học! 🚀</button>
+  </div>
+</div>
+
 <!-- ============ HOME ============ -->
-<div class="screen active" id="screen-home">
+<div class="screen" id="screen-home">
   <div class="hero">
-    <div class="hero-greet">☀️ Chào buổi sáng!</div>
-    <div class="hero-name">Bé Minh Anh 👧</div>
-    <div class="stars-pill">
-      <span>⭐</span>
-      <span class="stars-val" id="star-home">0</span>
-      <span style="font-size:12px;opacity:.8">ngôi sao</span>
+    <div class="hero-greet" id="home-greet">☀️ Chào bé!</div>
+    <div class="hero-name" id="home-name">Bé yêu 👧</div>
+    <div class="hero-row">
+      <div class="stars-pill">
+        <span>⭐</span>
+        <span class="stars-val" id="star-home">0</span>
+        <span style="font-size:12px;opacity:.8">ngôi sao</span>
+      </div>
+      <div class="streak-pill" id="streak-pill">🔥 0 ngày</div>
     </div>
     <div class="mascot">🦊</div>
   </div>
 
+  <div class="stage-banner" id="stage-banner">
+    <span class="sb-ico">🎯</span>
+    <div class="sb-inf">
+      <div class="sb-title" id="stage-banner-title">Giai đoạn 1</div>
+      <div class="sb-sub" id="stage-banner-sub">Nền tảng nhận thức • 10 phút/ngày</div>
+    </div>
+  </div>
+
   <div class="sec-title">📚 Môn học hôm nay</div>
   <div class="subj-grid">
-    <button class="subj-card sc-math" onclick="startLesson('math')">
+    <button class="subj-card sc-math" onclick="startLesson('math')" id="card-math">
       <span class="si">🔢</span>
       <div class="sn">Toán học</div>
-      <div class="sl">Đếm & Cộng trừ</div>
-      <div class="spb"><div class="spf" style="width:35%"></div></div>
+      <div class="sl" id="sl-math">Đếm & Cộng trừ</div>
+      <div class="spb"><div class="spf" id="spf-math" style="width:0%"></div></div>
     </button>
-    <button class="subj-card sc-en" onclick="startLesson('english')">
+    <button class="subj-card sc-en" onclick="startLesson('english')" id="card-english">
       <span class="si">🌍</span>
       <div class="sn">Tiếng Anh</div>
-      <div class="sl">Màu sắc & Con vật</div>
-      <div class="spb"><div class="spf" style="width:20%"></div></div>
+      <div class="sl" id="sl-english">Màu sắc & Con vật</div>
+      <div class="spb"><div class="spf" id="spf-english" style="width:0%"></div></div>
     </button>
-    <button class="subj-card sc-vn" onclick="startLesson('vietnamese')">
+    <button class="subj-card sc-vn" onclick="startLesson('vietnamese')" id="card-vietnamese">
       <span class="si">🇻🇳</span>
       <div class="sn">Tiếng Việt</div>
-      <div class="sl">Chữ cái & Câu chuyện</div>
-      <div class="spb"><div class="spf" style="width:50%"></div></div>
+      <div class="sl" id="sl-vietnamese">Chữ cái & Từ ngữ</div>
+      <div class="spb"><div class="spf" id="spf-vietnamese" style="width:0%"></div></div>
     </button>
-    <button class="subj-card sc-lg" onclick="startLesson('logic')">
+    <button class="subj-card sc-lg" onclick="startLesson('logic')" id="card-logic">
       <span class="si">🧩</span>
       <div class="sn">Tư duy</div>
-      <div class="sl">Tìm quy luật</div>
-      <div class="spb"><div class="spf" style="width:45%"></div></div>
+      <div class="sl" id="sl-logic">Tìm quy luật</div>
+      <div class="spb"><div class="spf" id="spf-logic" style="width:0%"></div></div>
     </button>
   </div>
 
   <div class="sec-title">🎯 Nhiệm vụ hôm nay</div>
-  <div class="miss-list">
+  <div class="miss-list" id="missions-list">
     <div class="miss-item" onclick="startLesson('math')">
       <div class="miss-ico" style="background:#FFF0F0">🔢</div>
-      <div class="miss-inf"><div class="miss-t">Đếm số từ 1 đến 5</div><div class="miss-d">5 bài • 10 phút</div></div>
-      <div class="miss-star">+15 ⭐</div>
-    </div>
-    <div class="miss-item" onclick="startLesson('logic')">
-      <div class="miss-ico" style="background:#F3F0FF">🧩</div>
-      <div class="miss-inf"><div class="miss-t">Tìm quy luật hình</div><div class="miss-d">4 bài • 8 phút</div></div>
-      <div class="miss-star">+10 ⭐</div>
+      <div class="miss-inf"><div class="miss-t">Toán học</div><div class="miss-d">5 bài • 10 phút</div></div>
+      <div class="miss-star">+25 ⭐</div>
     </div>
     <div class="miss-item" onclick="startLesson('english')">
       <div class="miss-ico" style="background:#F0FFF4">🌍</div>
-      <div class="miss-inf"><div class="miss-t">Học màu sắc tiếng Anh</div><div class="miss-d">4 bài • 8 phút</div></div>
-      <div class="miss-star">+10 ⭐</div>
+      <div class="miss-inf"><div class="miss-t">Tiếng Anh</div><div class="miss-d">4 bài • 8 phút</div></div>
+      <div class="miss-star">+20 ⭐</div>
+    </div>
+    <div class="miss-item" onclick="startLesson('logic')">
+      <div class="miss-ico" style="background:#F3F0FF">🧩</div>
+      <div class="miss-inf"><div class="miss-t">Tư duy Logic</div><div class="miss-d">4 bài • 8 phút</div></div>
+      <div class="miss-star">+20 ⭐</div>
     </div>
   </div>
   <div class="spacer"></div>
@@ -282,6 +390,7 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
     <button class="btn-back" onclick="goHome()">←</button>
     <div class="lpbar"><div class="lpfill" id="math-pbar" style="width:0%"></div></div>
     <div class="lp-txt" id="math-ptxt">0/5</div>
+    <button class="tts-btn" id="tts-math" onclick="reSpeakCurrent()">🔊</button>
   </div>
   <div class="ex-wrap" id="math-ex"></div>
 </div>
@@ -292,6 +401,7 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
     <button class="btn-back" onclick="goHome()">←</button>
     <div class="lpbar"><div class="lpfill" id="english-pbar" style="width:0%"></div></div>
     <div class="lp-txt" id="english-ptxt">0/4</div>
+    <button class="tts-btn" id="tts-english" onclick="reSpeakCurrent()">🔊</button>
   </div>
   <div class="ex-wrap" id="english-ex"></div>
 </div>
@@ -302,6 +412,7 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
     <button class="btn-back" onclick="goHome()">←</button>
     <div class="lpbar"><div class="lpfill" id="vietnamese-pbar" style="width:0%"></div></div>
     <div class="lp-txt" id="vietnamese-ptxt">0/4</div>
+    <button class="tts-btn" id="tts-vietnamese" onclick="reSpeakCurrent()">🔊</button>
   </div>
   <div class="ex-wrap" id="vietnamese-ex"></div>
 </div>
@@ -312,6 +423,7 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
     <button class="btn-back" onclick="goHome()">←</button>
     <div class="lpbar"><div class="lpfill" id="logic-pbar" style="width:0%"></div></div>
     <div class="lp-txt" id="logic-ptxt">0/4</div>
+    <button class="tts-btn" id="tts-logic" onclick="reSpeakCurrent()">🔊</button>
   </div>
   <div class="ex-wrap" id="logic-ex"></div>
 </div>
@@ -323,113 +435,20 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
   <div class="comp-sub" id="comp-sub">Bé đã hoàn thành bài học!</div>
   <div class="comp-stars"><div class="comp-s">⭐</div><div class="comp-s">⭐</div><div class="comp-s">⭐</div></div>
   <div class="comp-earned" id="comp-earned">+35 ⭐ hôm nay!</div>
-  <button class="comp-btn" onclick="goHome()">🏠 Về trang chủ</button>
+  <div class="comp-btns">
+    <button class="comp-btn" onclick="goHome()">🏠 Về trang chủ</button>
+    <button class="comp-btn ws" onclick="openWorksheet()">📄 In phiếu bài tập</button>
+  </div>
 </div>
 
 <!-- ============ ROADMAP ============ -->
 <div class="screen" id="screen-roadmap">
   <div class="road-hero">
     <h2>🗺️ Lộ trình học tập</h2>
-    <p>Từ 3,5 tuổi đến thi vào lớp 1 trọng điểm Hà Nội</p>
+    <p id="road-sub">Từ 3,5 tuổi đến thi vào lớp 1 trọng điểm Hà Nội</p>
   </div>
-  <div class="road-body">
-
-    <div class="stage-card">
-      <div class="stage-hdr">
-        <div class="stage-num" style="background:#FF6B6B">1</div>
-        <div class="stage-inf">
-          <div class="stage-name">Nền tảng nhận thức</div>
-          <div class="stage-age">3,5 – 4,5 tuổi &nbsp;•&nbsp; 10 phút/ngày</div>
-        </div>
-        <div class="stage-badge" style="background:#FFF0F0;color:#FF6B6B">🔥 Đang học</div>
-      </div>
-      <div class="stage-body">
-        <div class="skill-tags">
-          <span class="skill-tag">🔢 Đếm 1–10</span><span class="skill-tag">⭕ 4 hình cơ bản</span>
-          <span class="skill-tag">🎨 Màu sắc</span><span class="skill-tag">🔤 A–Z nhận dạng</span>
-          <span class="skill-tag">🌍 Hello/Bye</span><span class="skill-tag">🧩 Phân loại 1 thuộc tính</span>
-        </div>
-        <div class="stl"><div class="stlf" style="width:35%;background:#FF6B6B"></div></div>
-      </div>
-    </div>
-
-    <div class="stage-card">
-      <div class="stage-hdr">
-        <div class="stage-num" style="background:#4ECDC4">2</div>
-        <div class="stage-inf">
-          <div class="stage-name">Phát triển tư duy</div>
-          <div class="stage-age">4,5 – 5,5 tuổi &nbsp;•&nbsp; 15 phút/ngày</div>
-        </div>
-        <div class="stage-badge" style="background:#E0F7F5;color:#4ECDC4">⏳ Sắp tới</div>
-      </div>
-      <div class="stage-body">
-        <div class="skill-tags">
-          <span class="skill-tag">➕ Cộng/trừ trong 5</span><span class="skill-tag">📖 Bảng chữ cái đọc</span>
-          <span class="skill-tag">🔁 Tìm quy luật</span><span class="skill-tag">🌍 100+ từ vựng EN</span>
-          <span class="skill-tag">📸 Kể chuyện 3 tranh</span><span class="skill-tag">🤔 Ma trận 2×2</span>
-        </div>
-        <div class="stl"><div class="stlf" style="width:0%;background:#4ECDC4"></div></div>
-      </div>
-    </div>
-
-    <div class="stage-card">
-      <div class="stage-hdr">
-        <div class="stage-num" style="background:#FFE66D;color:#333">3</div>
-        <div class="stage-inf">
-          <div class="stage-name">Nâng cao & Tích hợp</div>
-          <div class="stage-age">5,5 – 6 tuổi &nbsp;•&nbsp; 20 phút/ngày</div>
-        </div>
-        <div class="stage-badge" style="background:#FFF8E1;color:#C9920A">🔒 Chưa mở</div>
-      </div>
-      <div class="stage-body">
-        <div class="skill-tags">
-          <span class="skill-tag">➕ Cộng/trừ trong 10</span><span class="skill-tag">🔤 Ghép vần cơ bản</span>
-          <span class="skill-tag">🧮 Ma trận 3×3</span><span class="skill-tag">💬 Hội thoại EN</span>
-          <span class="skill-tag">📝 Bài toán có lời</span><span class="skill-tag">🔍 Hình học 3D</span>
-        </div>
-        <div class="stl"><div class="stlf" style="width:0%;background:#FFE66D"></div></div>
-      </div>
-    </div>
-
-    <div class="stage-card">
-      <div class="stage-hdr">
-        <div class="stage-num" style="background:#845EC2">4</div>
-        <div class="stage-inf">
-          <div class="stage-name">Ôn luyện thi đầu vào</div>
-          <div class="stage-age">6 tuổi &nbsp;•&nbsp; 3 tháng trước thi</div>
-        </div>
-        <div class="stage-badge" style="background:#EFE5FF;color:#845EC2">🔒 Chưa mở</div>
-      </div>
-      <div class="stage-body">
-        <div class="skill-tags">
-          <span class="skill-tag">📋 Mock Nguyễn Siêu</span><span class="skill-tag">📋 Mock Đoàn Thị Điểm</span>
-          <span class="skill-tag">📋 Mock Ngôi Sao CG</span><span class="skill-tag">🎤 Phỏng vấn EN</span>
-          <span class="skill-tag">💪 Tự tin & Tự lập</span>
-        </div>
-        <div class="stl"><div class="stlf" style="width:0%;background:#845EC2"></div></div>
-      </div>
-    </div>
-
-    <div class="sec-title" style="padding-left:0;padding-top:8px">🏫 Trường mục tiêu</div>
-    <div class="schools-row">
-      <div class="sch-card">
-        <div class="sch-ico">🎓</div>
-        <div class="sch-name">Nguyễn Siêu</div>
-        <div class="sch-pct" style="color:#339AF0">35%</div>
-      </div>
-      <div class="sch-card">
-        <div class="sch-ico">⭐</div>
-        <div class="sch-name">Ngôi Sao Cầu Giấy</div>
-        <div class="sch-pct" style="color:#51CF66">40%</div>
-      </div>
-      <div class="sch-card">
-        <div class="sch-ico">🌸</div>
-        <div class="sch-name">Đoàn Thị Điểm</div>
-        <div class="sch-pct" style="color:#FF6B6B">38%</div>
-      </div>
-    </div>
-
-    <div class="tip-box">💡 <b>Bé đang ở Giai đoạn 1.</b> Cần hoàn thành ~2,4 năm học nữa để sẵn sàng thi. Học đều đặn 10 phút/ngày là đủ!</div>
+  <div class="road-body" id="road-body">
+    <!-- dynamically built -->
   </div>
   <nav class="bnav">
     <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
@@ -442,52 +461,53 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 <div class="screen" id="screen-parent">
   <div class="dash-hero">
     <h2>👨‍👩‍👧 Bảng theo dõi</h2>
-    <div class="dash-sub">Bé Minh Anh &nbsp;•&nbsp; 3 tuổi 6 tháng</div>
+    <div class="dash-sub" id="dash-sub">Bé yêu • 3 tuổi 6 tháng</div>
     <div class="dash-stats">
       <div class="dstat"><div class="dstat-v" id="star-parent">0</div><div class="dstat-l">Ngôi sao</div></div>
-      <div class="dstat"><div class="dstat-v">3</div><div class="dstat-l">Ngày streak</div></div>
-      <div class="dstat"><div class="dstat-v">12</div><div class="dstat-l">Bài xong</div></div>
+      <div class="dstat"><div class="dstat-v" id="streak-parent">0</div><div class="dstat-l">Ngày streak</div></div>
+      <div class="dstat"><div class="dstat-v" id="lessons-parent">0</div><div class="dstat-l">Bài xong</div></div>
     </div>
   </div>
 
   <div class="prog-sec">
     <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:13px">📊 Tiến độ từng môn</div>
-    <div class="prog-lbl">🔢 Toán học <span style="color:#FF6B6B">35%</span></div>
-    <div class="prog-bar"><div class="prog-fill" style="width:35%;background:#FF6B6B"></div></div>
-    <div class="prog-lbl">🌍 Tiếng Anh <span style="color:#51CF66">20%</span></div>
-    <div class="prog-bar"><div class="prog-fill" style="width:20%;background:#51CF66"></div></div>
-    <div class="prog-lbl">🇻🇳 Tiếng Việt <span style="color:#DEAD00">50%</span></div>
-    <div class="prog-bar"><div class="prog-fill" style="width:50%;background:#DEAD00"></div></div>
-    <div class="prog-lbl">🧩 Tư duy Logic <span style="color:#845EC2">45%</span></div>
-    <div class="prog-bar"><div class="prog-fill" style="width:45%;background:#845EC2"></div></div>
+    <div class="prog-lbl">🔢 Toán học <span id="pct-math" style="color:#FF6B6B">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="pf-math" style="width:0%;background:#FF6B6B"></div></div>
+    <div class="prog-lbl">🌍 Tiếng Anh <span id="pct-english" style="color:#51CF66">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="pf-english" style="width:0%;background:#51CF66"></div></div>
+    <div class="prog-lbl">🇻🇳 Tiếng Việt <span id="pct-vietnamese" style="color:#DEAD00">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="pf-vietnamese" style="width:0%;background:#DEAD00"></div></div>
+    <div class="prog-lbl">🧩 Tư duy Logic <span id="pct-logic" style="color:#845EC2">0%</span></div>
+    <div class="prog-bar"><div class="prog-fill" id="pf-logic" style="width:0%;background:#845EC2"></div></div>
   </div>
 
   <div class="card-block">
     <h3>🏫 Mức độ sẵn sàng theo trường</h3>
     <div class="ready-row">
       <span class="ready-sch">🎓 Nguyễn Siêu</span>
-      <div class="ready-bar"><div class="ready-fill" style="width:35%;background:#339AF0"></div></div>
-      <span class="ready-num" style="color:#339AF0">35%</span>
+      <div class="ready-bar"><div class="ready-fill" id="rf-ns" style="width:0%;background:#339AF0"></div></div>
+      <span class="ready-num" id="rn-ns" style="color:#339AF0">0%</span>
     </div>
     <div class="ready-row">
       <span class="ready-sch">⭐ Ngôi Sao CG</span>
-      <div class="ready-bar"><div class="ready-fill" style="width:40%;background:#51CF66"></div></div>
-      <span class="ready-num" style="color:#51CF66">40%</span>
+      <div class="ready-bar"><div class="ready-fill" id="rf-nscg" style="width:0%;background:#51CF66"></div></div>
+      <span class="ready-num" id="rn-nscg" style="color:#51CF66">0%</span>
     </div>
     <div class="ready-row">
       <span class="ready-sch">🌸 Đoàn Thị Điểm</span>
-      <div class="ready-bar"><div class="ready-fill" style="width:38%;background:#FF6B6B"></div></div>
-      <span class="ready-num" style="color:#FF6B6B">38%</span>
+      <div class="ready-bar"><div class="ready-fill" id="rf-dtd" style="width:0%;background:#FF6B6B"></div></div>
+      <span class="ready-num" id="rn-dtd" style="color:#FF6B6B">0%</span>
     </div>
-    <div class="tip-box">💡 <b>Ưu tiên:</b> Tập trung Tiếng Anh để cải thiện cơ hội đỗ Nguyễn Siêu — trường này đặt nặng tiếng Anh nhất. Luyện speaking 5 phút mỗi ngày.</div>
+    <div class="tip-box" id="parent-tip">💡 Hãy bắt đầu học để xem tiến độ bé nhé!</div>
   </div>
 
   <div class="card-block">
-    <h3>🔥 Lịch học tháng 6/2026</h3>
+    <h3>🔥 Lịch học tháng này</h3>
     <div class="streak-dots" id="streak-cal"></div>
   </div>
 
-  <button class="cta-btn" onclick="showPDFAlert()">📄 Xuất báo cáo PDF</button>
+  <button class="cta-btn" onclick="openWorksheet()">📄 In phiếu bài tập màu sắc</button>
+  <button class="cta-btn sec" onclick="confirmReset()">🔄 Cài đặt lại hồ sơ bé</button>
   <div class="spacer"></div>
   <nav class="bnav">
     <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
@@ -507,49 +527,233 @@ html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-fa
 
 <script>
 // ─────────────────────────────────────────────
-//  STATE
+//  STORAGE & PROFILE
 // ─────────────────────────────────────────────
-let stars = 0;
-let activeLessonId = null;
-let exIdx = 0;
-let answered = false;
-let currentScreenId = 'home';
+const SK = 'suploedu_v2';
+const DEF = {
+  setupDone:false, name:'Bé yêu', ageYears:3, ageMonths:6,
+  targetSchools:[], stage:1, stars:0,
+  streakDates:[], lastDate:null, lessonsCompleted:0,
+  subj:{ math:0, english:0, vietnamese:0, logic:0 },
+  completed:{ math:false, english:false, vietnamese:false, logic:false }
+};
+
+let P = JSON.parse(localStorage.getItem(SK) || 'null') || Object.assign({}, DEF);
+
+function saveP(){ localStorage.setItem(SK, JSON.stringify(P)); }
+
+function calcStage(y, m){
+  const t = y*12 + m;
+  if(t < 54) return 1;
+  if(t < 66) return 2;
+  if(t < 72) return 3;
+  return 4;
+}
+
+const STAGE_NAMES = [
+  '',
+  'Giai đoạn 1 — Nền tảng nhận thức',
+  'Giai đoạn 2 — Phát triển tư duy',
+  'Giai đoạn 3 — Nâng cao & Tích hợp',
+  'Giai đoạn 4 — Ôn luyện thi đầu vào'
+];
+const STAGE_MINS = ['','10 phút/ngày','15 phút/ngày','20 phút/ngày','30 phút/ngày'];
 
 // ─────────────────────────────────────────────
-//  EXERCISE DATA
+//  ONBOARDING
 // ─────────────────────────────────────────────
-const DB = {
-  math: [
-    { type:'count', q:'Có mấy quả táo? 🤔', items:['🍎','🍎','🍎'],            ans:'3', opts:['2','3','4'],    s:5 },
-    { type:'count', q:'Đếm xem có mấy con thỏ?',  items:['🐰','🐰','🐰','🐰','🐰'], ans:'5', opts:['4','5','6'],    s:5 },
-    { type:'count', q:'Có bao nhiêu ngôi sao?',   items:['⭐','⭐'],               ans:'2', opts:['1','2','3'],    s:5 },
-    { type:'add',   q:'2 + 3 = mấy? 🧮', left:['🍓','🍓'], right:['🍓','🍓','🍓'], ans:'5', opts:['4','5','6'],    s:10 },
-    { type:'cmp',   q:'Nhóm nào NHIỀU hơn?', ga:['🦆','🦆','🦆'], gb:['🦆','🦆','🦆','🦆'], ans:'B', opts:['Nhóm A','Nhóm B','Bằng nhau'], s:5 },
-  ],
-  english: [
-    { type:'color',  q:'What color is this? 🎨', color:'#FF0000', ans:'Red',  opts:['Red','Blue','Green','Yellow'],    s:5 },
-    { type:'color',  q:'What color is this?',    color:'#339AF0', ans:'Blue', opts:['Purple','Blue','Green','Orange'],  s:5 },
-    { type:'animal', q:'What animal is this? 🐾', img:'🐱', ans:'Cat', opts:['Dog','Cat','Bird','Fish'],  s:5 },
-    { type:'animal', q:'What animal is this?',    img:'🐶', ans:'Dog', opts:['Cat','Rabbit','Dog','Tiger'], s:5 },
-  ],
-  vietnamese: [
-    { type:'letter', q:'Chữ nào là chữ "A"?',  ans:'A', opts:['A','B','C','D'], s:5 },
-    { type:'letter', q:'Chữ nào là chữ "M"?',  ans:'M', opts:['N','M','H','K'], s:5 },
-    { type:'pick',   q:'Từ nào bắt đầu bằng chữ "H"?', ans:'Hoa', opts:['🐶 Chó','🌸 Hoa','🍎 Táo','🌙 Trăng'], s:10 },
-    { type:'pick',   q:'Bức tranh này kể về điều gì?', img:'🌤️', ans:'Trời nắng đẹp', opts:['Trời mưa','Trời nắng đẹp','Trời tối','Trời tuyết'], s:10 },
-  ],
-  logic: [
-    { type:'pattern', q:'Hình tiếp theo là gì? 🔍', seq:['🔴','🔵','🔴','🔵','🔴'], ans:'🔵', opts:['🔵','🔴','🟢'], s:10 },
-    { type:'pattern', q:'Điền vào dấu ❓',           seq:['🌟','🌙','🌟','🌙','🌟'],    ans:'🌙', opts:['⭐','🌙','☀️'], s:10 },
-    { type:'pick',    q:'Thứ nào KHÁC với các thứ còn lại? 🤔', hint:'Một thứ không phải trái cây', ans:'🚗 Xe hơi', opts:['🍎 Táo','🍊 Cam','🚗 Xe hơi','🍇 Nho'], s:10 },
-    { type:'numseq',  q:'Số tiếp theo là mấy?',       seq:['1️⃣','2️⃣','3️⃣','4️⃣'],        ans:'5️⃣', opts:['3️⃣','5️⃣','6️⃣'], s:10 },
-  ],
+let obAgeY = 3, obAgeM = 6;
+
+function stepAge(part, delta){
+  if(part==='y'){
+    obAgeY = Math.max(2, Math.min(7, obAgeY+delta));
+    document.getElementById('ob-y').textContent = obAgeY;
+  } else {
+    obAgeM = Math.max(0, Math.min(11, obAgeM+delta));
+    document.getElementById('ob-m').textContent = obAgeM;
+  }
+  const s = calcStage(obAgeY, obAgeM);
+  document.getElementById('ob-preview-text').textContent = STAGE_NAMES[s];
+  beep(440,.06,'sine',.1);
+}
+
+function togChip(el){
+  el.classList.toggle('on');
+  beep(520,.07,'sine',.1);
+}
+
+function finishOnboard(){
+  const nm = document.getElementById('ob-name').value.trim() || 'Bé yêu';
+  const schools = Array.from(document.querySelectorAll('.sch-chip.on')).map(e=>e.dataset.sch);
+  const s = calcStage(obAgeY, obAgeM);
+
+  P = {
+    ...DEF,
+    setupDone:true,
+    name: nm,
+    ageYears: obAgeY,
+    ageMonths: obAgeM,
+    targetSchools: schools,
+    stage: s,
+    stars: 0, streakDates:[], lastDate:null,
+    lessonsCompleted:0,
+    subj:{ math:0, english:0, vietnamese:0, logic:0 },
+    completed:{ math:false, english:false, vietnamese:false, logic:false }
+  };
+  saveP();
+  sndStar();
+  updateHomeUI();
+  _transition('home','right');
+}
+
+// ─────────────────────────────────────────────
+//  EXERCISE DATABASE — Stage-aware
+// ─────────────────────────────────────────────
+const EX = {
+  math: {
+    s1: [
+      { type:'count', q:'Có mấy quả táo? 🍎', items:['🍎','🍎','🍎'], ans:'3', opts:['2','3','4'], s:5 },
+      { type:'count', q:'Đếm xem có mấy con thỏ?', items:['🐰','🐰','🐰','🐰','🐰'], ans:'5', opts:['4','5','6'], s:5 },
+      { type:'count', q:'Có bao nhiêu ngôi sao?', items:['⭐','⭐'], ans:'2', opts:['1','2','3'], s:5 },
+      { type:'cmp', q:'Nhóm nào NHIỀU hơn?', ga:['🦆','🦆','🦆'], gb:['🦆','🦆','🦆','🦆'], ans:'Nhóm B', opts:['Nhóm A','Nhóm B','Bằng nhau'], s:5, ttsLang:'vi' },
+      { type:'count', q:'Có bao nhiêu bông hoa?', items:['🌸','🌸','🌸','🌸'], ans:'4', opts:['3','4','5'], s:5 },
+    ],
+    s2: [
+      { type:'add', q:'2 + 3 = mấy? 🧮', left:['🍓','🍓'], right:['🍓','🍓','🍓'], ans:'5', opts:['4','5','6'], s:10 },
+      { type:'add', q:'1 + 4 = ?', left:['🌟'], right:['🌟','🌟','🌟','🌟'], ans:'5', opts:['3','4','5'], s:10 },
+      { type:'count', q:'Đếm từ 1 đến 10: Có bao nhiêu bướm?', items:['🦋','🦋','🦋','🦋','🦋','🦋','🦋'], ans:'7', opts:['6','7','8'], s:10 },
+      { type:'cmp', q:'Nhóm nào ÍT hơn?', ga:['🐟','🐟'], gb:['🐟','🐟','🐟','🐟','🐟'], ans:'Nhóm A', opts:['Nhóm A','Nhóm B','Bằng nhau'], s:10, ttsLang:'vi' },
+      { type:'add', q:'3 + 2 = ?', left:['🍕','🍕','🍕'], right:['🍕','🍕'], ans:'5', opts:['5','6','4'], s:10 },
+    ],
+    s3: [
+      { type:'add', q:'4 + 6 = ?', left:['🔵','🔵','🔵','🔵'], right:['🔵','🔵','🔵','🔵','🔵','🔵'], ans:'10', opts:['8','9','10'], s:15 },
+      { type:'cmp', q:'Số nào LỚN nhất?', ga:['🟢 7'], gb:['🟡 9'], ans:'Nhóm B', opts:['Nhóm A','Nhóm B','Bằng nhau'], s:15, ttsLang:'vi' },
+      { type:'add', q:'5 + 5 = ?', left:['⭐','⭐','⭐','⭐','⭐'], right:['⭐','⭐','⭐','⭐','⭐'], ans:'10', opts:['9','10','11'], s:15 },
+      { type:'count', q:'Đếm: 10 − 3 = ?', items:['🌕','🌕','🌕','🌕','🌕','🌕','🌕'], ans:'7', opts:['6','7','8'], s:15 },
+    ],
+    s4: [
+      { type:'add', q:'Bài toán: Có 5 quả cam, mua thêm 4 quả. Tất cả bao nhiêu?', left:['🍊','🍊','🍊','🍊','🍊'], right:['🍊','🍊','🍊','🍊'], ans:'9', opts:['8','9','10'], s:20 },
+      { type:'cmp', q:'Sắp xếp từ bé đến lớn: 3, 1, 5, 2, 4. Số ở giữa là?', ga:['🔢'], gb:['🔢'], ans:'Nhóm A', opts:['Nhóm A','Nhóm B','Bằng nhau'], s:20, ttsLang:'vi' },
+    ]
+  },
+  english: {
+    s1: [
+      { type:'color', q:'What color is this?', color:'#FF0000', ans:'Red', opts:['Red','Blue','Green','Yellow'], s:5, ttsLang:'en' },
+      { type:'color', q:'What color is this?', color:'#339AF0', ans:'Blue', opts:['Purple','Blue','Green','Orange'], s:5, ttsLang:'en' },
+      { type:'animal', q:'What animal is this?', img:'🐱', ans:'Cat', opts:['Dog','Cat','Bird','Fish'], s:5, ttsLang:'en' },
+      { type:'animal', q:'What animal is this?', img:'🐶', ans:'Dog', opts:['Cat','Rabbit','Dog','Tiger'], s:5, ttsLang:'en' },
+    ],
+    s2: [
+      { type:'color', q:'What color is this?', color:'#51CF66', ans:'Green', opts:['Green','Blue','Yellow','Pink'], s:10, ttsLang:'en' },
+      { type:'animal', q:'What animal is this?', img:'🐘', ans:'Elephant', opts:['Monkey','Elephant','Tiger','Bear'], s:10, ttsLang:'en' },
+      { type:'animal', q:'What animal is this?', img:'🦁', ans:'Lion', opts:['Tiger','Wolf','Lion','Dog'], s:10, ttsLang:'en' },
+      { type:'color', q:'What color is this?', color:'#FFE66D', ans:'Yellow', opts:['Orange','Yellow','White','Red'], s:10, ttsLang:'en' },
+      { type:'pick', q:'Which one can FLY?', ans:'🐦 Bird', opts:['🐟 Fish','🐦 Bird','🐢 Turtle','🐘 Elephant'], s:10, ttsLang:'en' },
+    ],
+    s3: [
+      { type:'pick', q:'How many legs does a dog have?', ans:'4 legs', opts:['2 legs','4 legs','6 legs','8 legs'], s:15, ttsLang:'en' },
+      { type:'animal', q:'What sound does a cow make?', img:'🐄', ans:'Moo', opts:['Woof','Moo','Meow','Oink'], s:15, ttsLang:'en' },
+      { type:'pick', q:'What do we use to write?', ans:'✏️ Pencil', opts:['🍎 Apple','✏️ Pencil','🚗 Car','🎈 Balloon'], s:15, ttsLang:'en' },
+    ],
+    s4: [
+      { type:'pick', q:'Which is a fruit?', ans:'🍊 Orange', opts:['🐶 Dog','🍊 Orange','🚀 Rocket','📚 Book'], s:20, ttsLang:'en' },
+      { type:'pick', q:'Where do fish live?', ans:'🌊 Ocean', opts:['🌲 Forest','🌊 Ocean','🏔️ Mountain','🏠 House'], s:20, ttsLang:'en' },
+    ]
+  },
+  vietnamese: {
+    s1: [
+      { type:'letter', q:'Chữ nào là chữ "A"?', ans:'A', opts:['A','B','C','D'], s:5, ttsLang:'vi' },
+      { type:'letter', q:'Chữ nào là chữ "M"?', ans:'M', opts:['N','M','H','K'], s:5, ttsLang:'vi' },
+      { type:'pick', q:'Từ nào bắt đầu bằng chữ "H"?', ans:'🌸 Hoa', opts:['🐶 Chó','🌸 Hoa','🍎 Táo','🌙 Trăng'], s:10, ttsLang:'vi' },
+      { type:'pick', q:'Đây là con gì?', img:'🐱', ans:'Con mèo', opts:['Con chó','Con mèo','Con bò','Con gà'], s:5, ttsLang:'vi' },
+    ],
+    s2: [
+      { type:'letter', q:'Chữ nào là chữ "Ơ"?', ans:'Ơ', opts:['O','Ô','Ơ','Ò'], s:10, ttsLang:'vi' },
+      { type:'pick', q:'Từ nào chỉ màu sắc?', ans:'🔴 Đỏ', opts:['🏠 Nhà','🔴 Đỏ','🐶 Chó','🍎 Táo'], s:10, ttsLang:'vi' },
+      { type:'pick', q:'Tranh nào cho thấy trời đang mưa?', img:'🌧️', ans:'Trời mưa', opts:['Trời nắng','Trời mưa','Trời tuyết','Trời tối'], s:10, ttsLang:'vi' },
+      { type:'letter', q:'Chữ nào là chữ "B"?', ans:'B', opts:['D','P','B','R'], s:5, ttsLang:'vi' },
+    ],
+    s3: [
+      { type:'pick', q:'Câu nào ĐÚNG ngữ pháp?', ans:'Con mèo uống sữa.', opts:['Sữa con mèo uống.','Con mèo uống sữa.','Uống sữa mèo con.','Mèo sữa con uống.'], s:15, ttsLang:'vi' },
+      { type:'pick', q:'Từ nào có âm "ă"?', ans:'Cắn', opts:['Can','Cân','Cắn','Căn'], s:15, ttsLang:'vi' },
+    ],
+    s4: [
+      { type:'pick', q:'Hoàn thành câu: "Bé ___ đi học."', ans:'sắp', opts:['nhanh','sắp','vui','đẹp'], s:20, ttsLang:'vi' },
+    ]
+  },
+  logic: {
+    s1: [
+      { type:'pattern', q:'Hình tiếp theo là gì?', seq:['🔴','🔵','🔴','🔵','🔴'], ans:'🔵', opts:['🔵','🔴','🟢'], s:10, ttsLang:'vi' },
+      { type:'pattern', q:'Điền vào dấu ❓', seq:['🌟','🌙','🌟','🌙','🌟'], ans:'🌙', opts:['⭐','🌙','☀️'], s:10, ttsLang:'vi' },
+      { type:'pick', q:'Thứ nào KHÁC với các thứ còn lại?', hint:'Một thứ không phải trái cây', ans:'🚗 Xe hơi', opts:['🍎 Táo','🍊 Cam','🚗 Xe hơi','🍇 Nho'], s:10, ttsLang:'vi' },
+      { type:'numseq', q:'Số tiếp theo là mấy?', seq:['1️⃣','2️⃣','3️⃣','4️⃣'], ans:'5️⃣', opts:['3️⃣','5️⃣','6️⃣'], s:10, ttsLang:'vi' },
+    ],
+    s2: [
+      { type:'pattern', q:'Tìm hình tiếp theo trong dãy:', seq:['🟥','🟦','🟦','🟥','🟦','🟦','🟥'], ans:'🟦', opts:['🟥','🟦','🟩'], s:15, ttsLang:'vi' },
+      { type:'pick', q:'Con nào KHÔNG phải động vật biển?', ans:'🦁 Sư tử', opts:['🐠 Cá vàng','🦁 Sư tử','🦑 Mực','🐢 Rùa'], s:15, ttsLang:'vi' },
+      { type:'numseq', q:'Số còn thiếu là? 2, 4, 6, ?, 10', seq:['2️⃣','4️⃣','6️⃣','❓','🔟'], ans:'8', opts:['7','8','9'], s:15, ttsLang:'vi' },
+      { type:'pattern', q:'Hình nào tiếp theo?', seq:['🔺','🔺','🔷','🔺','🔺','🔷'], ans:'🔺', opts:['🔷','🔺','🟡'], s:10, ttsLang:'vi' },
+    ],
+    s3: [
+      { type:'pick', q:'Nếu tất cả mèo đều có 4 chân, và đây là con mèo, thì nó có mấy chân?', ans:'4 chân', opts:['2 chân','4 chân','6 chân','8 chân'], s:20, ttsLang:'vi' },
+      { type:'numseq', q:'Dãy số: 5, 10, 15, ?, 25', seq:['5️⃣','🔟','1️⃣5️⃣','❓','2️⃣5️⃣'], ans:'20', opts:['18','20','22'], s:20, ttsLang:'vi' },
+    ],
+    s4: [
+      { type:'pick', q:'Ma trận: 🔴🔵🟢 / 🔴🔵? / 🔴?🟢 — Ô ? đầu tiên là?', ans:'🟢', opts:['🔴','🔵','🟢'], s:25, ttsLang:'vi' },
+    ]
+  }
 };
+
+function getExList(subj){
+  const s = P.stage || 1;
+  return EX[subj]['s'+s] || EX[subj]['s1'] || [];
+}
 
 const SUBJ_NAMES = { math:'Toán học', english:'Tiếng Anh', vietnamese:'Tiếng Việt', logic:'Tư duy Logic' };
 
 // ─────────────────────────────────────────────
-//  AUDIO
+//  TTS — Web Speech API
+// ─────────────────────────────────────────────
+const voices = { en:null, vi:null };
+let currentTTSText = '';
+let currentTTSLang = 'vi';
+
+function loadVoices(){
+  const all = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  voices.en = all.find(v=>v.lang.startsWith('en-US')) || all.find(v=>v.lang.startsWith('en')) || null;
+  voices.vi = all.find(v=>v.lang.startsWith('vi')) || null;
+}
+
+if(window.speechSynthesis){
+  window.speechSynthesis.onvoiceschanged = loadVoices;
+  loadVoices();
+}
+
+function speak(text, lang='vi'){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = lang==='en' ? 'en-US' : 'vi-VN';
+  if(lang==='en' && voices.en) u.voice = voices.en;
+  if(lang==='vi' && voices.vi) u.voice = voices.vi;
+  u.rate = lang==='en' ? 0.85 : 0.82;
+  u.pitch = 1.1;
+  u.volume = 1;
+
+  const btn = document.querySelector('.tts-btn');
+  if(btn){ btn.classList.add('speaking'); u.onend = ()=>btn.classList.remove('speaking'); }
+
+  window.speechSynthesis.speak(u);
+  currentTTSText = text;
+  currentTTSLang = lang;
+}
+
+function reSpeakCurrent(){
+  if(currentTTSText) speak(currentTTSText, currentTTSLang);
+}
+
+// ─────────────────────────────────────────────
+//  AUDIO — Web Audio beeps
 // ─────────────────────────────────────────────
 let actx;
 function getACtx(){ return actx || (actx = new (window.AudioContext||window.webkitAudioContext)()); }
@@ -572,50 +776,67 @@ function sndTap(){  beep(440,.07,'sine',.12); }
 //  SCREEN NAV
 // ─────────────────────────────────────────────
 const navOrder = ['home','roadmap','parent'];
+let currentScreenId = 'onboard';
 
 function nav(id){
   const prev = navOrder.indexOf(currentScreenId);
   const next = navOrder.indexOf(id);
   _transition(id, next >= prev ? 'right' : 'left');
+  if(id==='roadmap') updateRoadmap();
+  if(id==='parent')  updateParentUI();
 }
 
-function goHome(){ _transition('home', 'left'); }
+function goHome(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  _transition('home','left');
+  updateHomeUI();
+}
 
 function _transition(id, dir){
   const from = document.getElementById('screen-'+currentScreenId);
   const to   = document.getElementById('screen-'+id);
   if(!to || from===to) return;
 
-  // Position 'to' screen off-screen in the right direction
   to.style.transition='none';
   to.style.transform = dir==='right' ? 'translateX(100%)' : 'translateX(-100%)';
   to.style.opacity='0';
-  to.classList.remove('active','exit');
+  to.classList.remove('active');
 
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     to.style.transition='';
-    to.style.transform=''; to.style.opacity='';
+    to.style.transform='';
+    to.style.opacity='';
     to.classList.add('active');
 
-    from.style.transform = dir==='right' ? 'translateX(-30%)' : 'translateX(30%)';
-    from.style.opacity='0';
-    from.addEventListener('transitionend', ()=>{
-      from.classList.remove('active');
-      from.style.transform=''; from.style.opacity='';
-    }, {once:true});
+    if(from){
+      from.style.transform = dir==='right' ? 'translateX(-30%)' : 'translateX(30%)';
+      from.style.opacity='0';
+      from.addEventListener('transitionend', ()=>{
+        from.classList.remove('active');
+        from.style.transform=''; from.style.opacity='';
+      }, {once:true});
+    }
   }));
 
   currentScreenId = id;
-  // Update bottom nav highlights
   document.querySelectorAll('.bnav-btn').forEach(b=>{
     b.classList.remove('on');
     if(b.getAttribute('onclick')===`nav('${id}')`) b.classList.add('on');
   });
 }
 
+// ─────────────────────────────────────────────
+//  LESSON FLOW
+// ─────────────────────────────────────────────
+let activeLessonId = null;
+let exIdx = 0;
+let answered = false;
+let currentExList = [];
+
 function startLesson(id){
   activeLessonId = id; exIdx = 0; answered = false;
-  _transition(id, 'right');
+  currentExList = getExList(id);
+  _transition(id,'right');
   renderEx(id, 0);
 }
 
@@ -623,7 +844,7 @@ function startLesson(id){
 //  EXERCISE RENDER
 // ─────────────────────────────────────────────
 function renderEx(subj, idx){
-  const list = DB[subj];
+  const list = currentExList;
   const wrap = document.getElementById(subj+'-ex');
   const pbar = document.getElementById(subj+'-pbar');
   const ptxt = document.getElementById(subj+'-ptxt');
@@ -637,9 +858,12 @@ function renderEx(subj, idx){
   answered = false;
   const ex = list[idx];
   wrap.innerHTML = buildExHTML(ex, subj, idx);
-
-  // Stagger animation on count items
   wrap.querySelectorAll('.cnt-item').forEach((el,i)=>el.style.animationDelay=(i*.09)+'s');
+
+  // Auto-speak after short delay
+  const lang = ex.ttsLang || (subj==='english'?'en':'vi');
+  const plainQ = ex.q.replace(/[🤔🧮🔍❓🎨🐾]/g,'').trim();
+  setTimeout(()=>speak(plainQ, lang), 420);
 }
 
 function buildExHTML(ex, subj, idx){
@@ -667,7 +891,7 @@ function buildExHTML(ex, subj, idx){
     h+=`<div class="cmp-grp"><div class="cmp-lbl">Nhóm A</div>${ex.ga.map(i=>`<span style="font-size:26px">${i}</span>`).join('')}</div>`;
     h+=`<div class="cmp-grp"><div class="cmp-lbl">Nhóm B</div>${ex.gb.map(i=>`<span style="font-size:26px">${i}</span>`).join('')}</div>`;
     h+=`</div>`;
-    h+=opts(ex.opts, ex.ans==='B'?'Nhóm B':ex.ans, subj, idx, 'c3', 'font-size:12.5px;padding:12px 6px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c3', 'font-size:12.5px;min-height:60px');
   }
   else if(ex.type==='color'){
     h+=`<div class="color-swatch" style="background:${ex.color}"></div>`;
@@ -678,17 +902,17 @@ function buildExHTML(ex, subj, idx){
     h+=opts(ex.opts, ex.ans, subj, idx, 'c2');
   }
   else if(ex.type==='letter'){
-    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:36px;font-weight:900;padding:20px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:36px;font-weight:900;min-height:88px');
   }
   else if(ex.type==='pick'){
     if(ex.img) h+=`<div class="vocab-card"><span class="vocab-img">${ex.img}</span></div>`;
-    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:13.5px;padding:14px 10px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:13.5px;min-height:72px');
   }
   else if(ex.type==='pattern'||ex.type==='numseq'){
     h+=`<div class="pat-box">`;
     ex.seq.forEach(it=>h+=`<span class="pat-item">${it}</span>`);
     h+=`<div class="pat-miss">❓</div></div>`;
-    h+=opts(ex.opts, ex.ans, subj, idx, 'c3', 'font-size:30px;padding:16px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c3', 'font-size:28px;min-height:72px');
   }
   return h;
 }
@@ -709,7 +933,7 @@ function answer(btn, subj, idx){
   if(answered) return;
   answered = true;
   const val = btn.dataset.val;
-  const ex  = DB[subj][idx];
+  const ex  = currentExList[idx];
   const ok  = val.trim() === String(ex.ans).trim();
 
   if(ok){
@@ -717,24 +941,24 @@ function answer(btn, subj, idx){
     sndOK();
     addStars(ex.s||5);
     showFB(true, ex.s||5);
-    setTimeout(()=>{ hideFB(); exIdx=idx+1; renderEx(subj,exIdx); }, 1200);
+    setTimeout(()=>{ hideFB(); exIdx=idx+1; renderEx(subj,exIdx); }, 1300);
   } else {
     btn.classList.add('no');
     sndWrong();
     showFB(false, 0);
-    setTimeout(()=>{ hideFB(); answered=false; btn.classList.remove('no'); }, 950);
+    setTimeout(()=>{ hideFB(); answered=false; btn.classList.remove('no'); }, 1000);
   }
 }
 
 // ─────────────────────────────────────────────
 //  FEEDBACK
 // ─────────────────────────────────────────────
-const FB_MSGS = ['Đúng rồi! 🎉','Tuyệt vời! 🌟','Giỏi quá! 💪','Xuất sắc! 🏆','Bé thông minh! 🧠'];
+const FB_VI = ['Đúng rồi! 🎉','Tuyệt vời! 🌟','Giỏi quá! 💪','Xuất sắc! 🏆','Bé thông minh! 🧠'];
 
 function showFB(ok, s){
   const ov=document.getElementById('fb-ov');
   document.getElementById('fb-emoji').textContent = ok ? '🎉' : '🤔';
-  document.getElementById('fb-text').textContent  = ok ? FB_MSGS[Math.floor(Math.random()*FB_MSGS.length)] : 'Thử lại nhé bé!';
+  document.getElementById('fb-text').textContent  = ok ? FB_VI[Math.floor(Math.random()*FB_VI.length)] : 'Thử lại nhé bé!';
   document.getElementById('fb-sub').textContent   = ok ? `+${s} ⭐` : 'Bé làm được mà! 💪';
   ov.classList.add('show');
   if(ok){ spawnStars(); sndStar(); }
@@ -742,7 +966,7 @@ function showFB(ok, s){
 function hideFB(){ document.getElementById('fb-ov').classList.remove('show'); }
 
 function spawnStars(){
-  const app=document.getElementById('app'), r=app.getBoundingClientRect();
+  const app=document.getElementById('app');
   for(let i=0;i<10;i++){
     const el=document.createElement('div');
     el.className='star-p';
@@ -756,27 +980,188 @@ function spawnStars(){
 }
 
 // ─────────────────────────────────────────────
-//  STARS
+//  STARS & STREAK
 // ─────────────────────────────────────────────
 function addStars(n){
-  stars+=n;
-  document.getElementById('star-home').textContent=stars;
-  document.getElementById('star-parent').textContent=stars;
+  P.stars = (P.stars||0) + n;
+  saveP();
+  document.getElementById('star-home').textContent = P.stars;
+}
+
+function updateStreak(){
+  const today = new Date().toISOString().slice(0,10);
+  if(!P.streakDates.includes(today)){
+    P.streakDates.push(today);
+    P.lastDate = today;
+    saveP();
+  }
 }
 
 // ─────────────────────────────────────────────
 //  COMPLETION
 // ─────────────────────────────────────────────
 function finishLesson(subj){
-  const total = DB[subj].reduce((a,e)=>a+(e.s||5),0);
+  const list = currentExList;
+  const total = list.reduce((a,e)=>a+(e.s||5),0);
   const pb=document.getElementById(subj+'-pbar'), pt=document.getElementById(subj+'-ptxt');
   if(pb) pb.style.width='100%';
-  if(pt) pt.textContent=DB[subj].length+'/'+DB[subj].length;
-  document.getElementById('comp-title').textContent='Hoàn thành! 🎊';
-  document.getElementById('comp-sub').textContent=`Bé đã xong bài ${SUBJ_NAMES[subj]}!`;
-  document.getElementById('comp-earned').textContent=`+${total} ⭐ hôm nay!`;
+  if(pt) pt.textContent=list.length+'/'+list.length;
+
+  P.completed[subj] = true;
+  P.lessonsCompleted = (P.lessonsCompleted||0) + 1;
+  P.subj[subj] = Math.min(100, (P.subj[subj]||0) + Math.round(100/Math.max(list.length,1)));
+  updateStreak();
+  saveP();
+
+  document.getElementById('comp-title').textContent = 'Hoàn thành! 🎊';
+  document.getElementById('comp-sub').textContent = `Bé đã xong bài ${SUBJ_NAMES[subj]}!`;
+  document.getElementById('comp-earned').textContent = `+${total} ⭐ hôm nay!`;
   sndStar(); spawnStars();
   _transition('completion','right');
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+}
+
+// ─────────────────────────────────────────────
+//  HOME UI UPDATE
+// ─────────────────────────────────────────────
+function greetText(){
+  const h = new Date().getHours();
+  if(h<12) return '☀️ Chào buổi sáng!';
+  if(h<18) return '🌤️ Chào buổi chiều!';
+  return '🌙 Chào buổi tối!';
+}
+
+function updateHomeUI(){
+  document.getElementById('home-greet').textContent = greetText();
+  document.getElementById('home-name').textContent = P.name + ' ' + (P.ageYears<5?'🐣':'👧');
+  document.getElementById('star-home').textContent = P.stars;
+
+  // streak
+  const today = new Date().toISOString().slice(0,10);
+  const cnt = P.streakDates ? P.streakDates.length : 0;
+  document.getElementById('streak-pill').textContent = `🔥 ${cnt} ngày`;
+
+  // stage banner
+  const sn = document.getElementById('stage-banner-title');
+  const ss = document.getElementById('stage-banner-sub');
+  if(sn) sn.textContent = STAGE_NAMES[P.stage];
+  if(ss) ss.textContent = STAGE_MINS[P.stage];
+
+  // subject progress bars & review tags
+  const subjs = ['math','english','vietnamese','logic'];
+  subjs.forEach(s=>{
+    const pct = P.subj[s] || 0;
+    const spf = document.getElementById('spf-'+s);
+    if(spf) spf.style.width = pct+'%';
+    const card = document.getElementById('card-'+s);
+    if(card){
+      const old = card.querySelector('.review-tag');
+      if(old) old.remove();
+      if(P.completed[s]){
+        const tag = document.createElement('div');
+        tag.className='review-tag'; tag.textContent='↩ Ôn tập';
+        card.appendChild(tag);
+      }
+    }
+  });
+}
+
+// ─────────────────────────────────────────────
+//  ROADMAP UI
+// ─────────────────────────────────────────────
+const ROAD_STAGES = [
+  { num:1, name:'Nền tảng nhận thức', age:'3,5–4,5 tuổi', min:'10 phút/ngày', col:'#FF6B6B',
+    skills:['🔢 Đếm 1–10','⭕ 4 hình cơ bản','🎨 Màu sắc','🔤 A–Z nhận dạng','🌍 Hello/Bye','🧩 Phân loại 1 thuộc tính'] },
+  { num:2, name:'Phát triển tư duy', age:'4,5–5,5 tuổi', min:'15 phút/ngày', col:'#4ECDC4',
+    skills:['➕ Cộng/trừ trong 5','📖 Bảng chữ cái đọc','🔁 Tìm quy luật','🌍 100+ từ vựng EN','📸 Kể chuyện 3 tranh','🤔 Ma trận 2×2'] },
+  { num:3, name:'Nâng cao & Tích hợp', age:'5,5–6 tuổi', min:'20 phút/ngày', col:'#FFE66D',
+    skills:['➕ Cộng/trừ trong 10','🔤 Ghép vần cơ bản','🧮 Ma trận 3×3','💬 Hội thoại EN','📝 Bài toán có lời','🔍 Hình học 3D'] },
+  { num:4, name:'Ôn luyện thi đầu vào', age:'6 tuổi', min:'30 phút/ngày', col:'#845EC2',
+    skills:['📋 Mock Nguyễn Siêu','📋 Mock Đoàn Thị Điểm','📋 Mock Ngôi Sao CG','🎤 Phỏng vấn EN','💪 Tự tin & Tự lập'] },
+];
+
+function updateRoadmap(){
+  const body = document.getElementById('road-body');
+  if(!body) return;
+  const overallPct = Math.round(Object.values(P.subj).reduce((a,b)=>a+b,0)/4);
+
+  let h='';
+  ROAD_STAGES.forEach(st=>{
+    const isCurrent = st.num===P.stage;
+    const isDone    = st.num < P.stage;
+    const isLocked  = st.num > P.stage;
+    const pct = isCurrent ? overallPct : (isDone ? 100 : 0);
+    const badgeTxt = isCurrent ? '🔥 Đang học' : (isDone ? '✅ Hoàn thành' : '🔒 Chưa mở');
+    const badgeBg  = isCurrent ? '#FFF0F0' : (isDone ? '#E0F7F5' : '#F5F7FA');
+    const badgeFg  = isCurrent ? '#FF6B6B' : (isDone ? '#4ECDC4' : '#aaa');
+
+    h+=`<div class="stage-card" style="${isLocked?'opacity:.65':''}">
+      <div class="stage-hdr">
+        <div class="stage-num" style="background:${st.col};${st.num===3?'color:#333':''}">
+          ${st.num===3?'<span style="color:#333">3</span>':st.num}
+        </div>
+        <div class="stage-inf">
+          <div class="stage-name">${st.name}</div>
+          <div class="stage-age">${st.age} &nbsp;•&nbsp; ${st.min}</div>
+        </div>
+        <div class="stage-badge" style="background:${badgeBg};color:${badgeFg}">${badgeTxt}</div>
+      </div>
+      <div class="stage-body">
+        <div class="skill-tags">${st.skills.map(s=>`<span class="skill-tag">${s}</span>`).join('')}</div>
+        <div class="stl"><div class="stlf" style="width:${pct}%;background:${st.col}"></div></div>
+      </div>
+    </div>`;
+  });
+
+  h+=`<div class="sec-title" style="padding-left:0;padding-top:8px">🏫 Trường mục tiêu</div>
+  <div class="schools-row">
+    <div class="sch-card"><div class="sch-ico">🎓</div><div class="sch-name">Nguyễn Siêu</div><div class="sch-pct" style="color:#339AF0">${readiness('ns')}%</div></div>
+    <div class="sch-card"><div class="sch-ico">⭐</div><div class="sch-name">Ngôi Sao CG</div><div class="sch-pct" style="color:#51CF66">${readiness('nscg')}%</div></div>
+    <div class="sch-card"><div class="sch-ico">🌸</div><div class="sch-name">Đoàn Thị Điểm</div><div class="sch-pct" style="color:#FF6B6B">${readiness('dtd')}%</div></div>
+  </div>
+  <div class="tip-box">💡 <b>Bé đang ở ${STAGE_NAMES[P.stage]}.</b> Học đều đặn ${STAGE_MINS[P.stage]} là đủ!</div>`;
+
+  body.innerHTML = h;
+}
+
+// ─────────────────────────────────────────────
+//  PARENT UI
+// ─────────────────────────────────────────────
+function readiness(school){
+  const base = Object.values(P.subj).reduce((a,b)=>a+b,0)/4;
+  const w = {ns:0.85, nscg:0.9, dtd:0.88}[school] || 1;
+  return Math.round(base*w);
+}
+
+function updateParentUI(){
+  document.getElementById('dash-sub').textContent = `${P.name} • ${P.ageYears} tuổi ${P.ageMonths} tháng`;
+  document.getElementById('star-parent').textContent = P.stars;
+  document.getElementById('streak-parent').textContent = (P.streakDates||[]).length;
+  document.getElementById('lessons-parent').textContent = P.lessonsCompleted||0;
+
+  const subjs = ['math','english','vietnamese','logic'];
+  subjs.forEach(s=>{
+    const pct = P.subj[s]||0;
+    document.getElementById('pct-'+s).textContent = pct+'%';
+    document.getElementById('pf-'+s).style.width = pct+'%';
+  });
+
+  ['ns','nscg','dtd'].forEach(sc=>{
+    const r = readiness(sc);
+    document.getElementById('rf-'+sc).style.width = r+'%';
+    document.getElementById('rn-'+sc).textContent = r+'%';
+  });
+
+  const tip = document.getElementById('parent-tip');
+  if(tip){
+    const en = P.subj.english||0;
+    const msg = en < 20
+      ? '💡 <b>Ưu tiên:</b> Tập trung Tiếng Anh để cải thiện cơ hội đỗ Nguyễn Siêu — trường này đặt nặng tiếng Anh nhất.'
+      : '💡 <b>Tiến độ tốt!</b> Tiếp tục duy trì luyện tập đều đặn mỗi ngày!';
+    tip.innerHTML = msg;
+  }
+
+  buildCal();
 }
 
 // ─────────────────────────────────────────────
@@ -784,33 +1169,243 @@ function finishLesson(subj){
 // ─────────────────────────────────────────────
 function buildCal(){
   const el=document.getElementById('streak-cal'); if(!el) return;
-  const today=9, doneDays=[1,2,3,5,6,7,8,9];
+  const now=new Date();
+  const todayStr=now.toISOString().slice(0,10);
+  const y=now.getFullYear(), mo=now.getMonth();
+  const daysInMonth=new Date(y,mo+1,0).getDate();
+  const todayDay=now.getDate();
   let h='';
-  for(let d=1;d<=30;d++){
+  for(let d=1;d<=daysInMonth;d++){
+    const ds=`${y}-${String(mo+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
     let cls='sd';
-    if(d===today) cls+=' today';
-    else if(doneDays.includes(d)) cls+=' done';
+    if(d===todayDay) cls+=' today';
+    else if((P.streakDates||[]).includes(ds)) cls+=' done';
     h+=`<div class="${cls}">${d}</div>`;
   }
   el.innerHTML=h;
 }
 
 // ─────────────────────────────────────────────
-//  PDF ALERT
+//  RESET
 // ─────────────────────────────────────────────
-function showPDFAlert(){
-  alert('📄 Báo cáo đang được tạo...\n\n✅ Tiến độ 4 môn học\n✅ Mức độ sẵn sàng theo trường\n✅ Gợi ý bài tập tuần tới\n✅ So sánh với milestone lứa tuổi\n\n→ Demo: file PDF sẽ xuất ở đây!');
+function confirmReset(){
+  if(confirm('⚠️ Xoá toàn bộ dữ liệu và cài đặt lại hồ sơ bé?')){
+    localStorage.removeItem(SK);
+    location.reload();
+  }
+}
+
+// ─────────────────────────────────────────────
+//  PRINTABLE WORKSHEET
+// ─────────────────────────────────────────────
+function openWorksheet(){
+  const w = window.open('','_blank');
+  if(!w){ alert('Trình duyệt đã chặn popup! Vui lòng cho phép popup để in phiếu.'); return; }
+  w.document.write(buildWorksheetHTML());
+  w.document.close();
+  setTimeout(()=>w.print(), 800);
+}
+
+function buildWorksheetHTML(){
+  const name = P.name || 'Bé yêu';
+  const date = new Date().toLocaleDateString('vi-VN');
+  const stage = P.stage || 1;
+
+  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8">
+<title>Phiếu bài tập — ${name}</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap');
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:'Baloo 2',sans-serif;background:#fff;padding:24px;color:#2B3A4B;max-width:780px;margin:0 auto}
+  @page{size:A4;margin:18mm}
+  @media print{body{padding:0}button{display:none!important}.page-break{page-break-before:always}}
+
+  .header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px;padding:22px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+  .hdr-left h1{font-size:26px;font-weight:800}
+  .hdr-left p{font-size:13px;opacity:.85;margin-top:4px}
+  .hdr-right{text-align:right;font-size:13px;opacity:.85}
+  .mascot-big{font-size:60px;line-height:1}
+
+  .section{margin-bottom:26px}
+  .sec-hdr{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#F093FB22,transparent);border-left:5px solid #F093FB;padding:10px 16px;border-radius:0 12px 12px 0;margin-bottom:16px}
+  .sec-hdr.math{border-color:#FF6B6B;background:linear-gradient(90deg,#FF6B6B22,transparent)}
+  .sec-hdr.en{border-color:#51CF66;background:linear-gradient(90deg,#51CF6622,transparent)}
+  .sec-hdr.vn{border-color:#FFB700;background:linear-gradient(90deg,#FFB70022,transparent)}
+  .sec-hdr.logic{border-color:#845EC2;background:linear-gradient(90deg,#845EC222,transparent)}
+  .sec-hdr h2{font-size:17px;font-weight:800}
+
+  /* Math exercises */
+  .math-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+  .math-box{background:#FFF0F0;border-radius:16px;padding:16px;text-align:center;border:2px solid #FFD0D0}
+  .math-box .q{font-size:24px;font-weight:800;margin-bottom:10px}
+  .math-box .items{font-size:28px;letter-spacing:3px;display:block;margin-bottom:10px}
+  .ans-line{border-bottom:3px dotted #FF6B6B;width:60px;margin:0 auto;height:28px}
+
+  /* English */
+  .en-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .en-card{background:#F0FFF4;border-radius:14px;padding:14px 10px;text-align:center;border:2px solid #C3F0CB}
+  .en-card .emoji{font-size:42px;display:block;margin-bottom:6px}
+  .en-card .word-line{border-bottom:2.5px dotted #51CF66;width:80%;margin:4px auto 0;height:24px}
+  .color-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .color-task{display:flex;align-items:center;gap:10px;background:#F8FAFF;border-radius:12px;padding:10px 14px;border:2px solid #DDE8FF}
+  .color-circle{width:40px;height:40px;border-radius:50%;border:2px solid #ccc;flex-shrink:0}
+  .color-line{border-bottom:2px dotted #339AF0;flex:1;height:24px}
+
+  /* Vietnamese */
+  .vn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .letter-trace{background:#FFF8E1;border-radius:14px;padding:16px 10px;text-align:center;border:2px dashed #FFB700}
+  .letter-big{font-size:52px;font-weight:900;color:#FFB700;display:block;margin-bottom:6px}
+  .vn-word-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  .vn-pair{display:flex;align-items:center;gap:10px;background:#FFFBF0;border-radius:12px;padding:10px 14px;border:2px solid #FFE082;min-width:180px;flex:1}
+  .vn-emoji{font-size:36px}
+  .vn-line{border-bottom:2px dotted #FFB700;flex:1;height:28px}
+
+  /* Logic */
+  .pat-row{display:flex;align-items:center;gap:10px;background:#F3F0FF;border-radius:14px;padding:16px;margin-bottom:12px;border:2px solid #D5C8FF;flex-wrap:wrap}
+  .pat-em{font-size:36px}
+  .pat-box-blank{width:52px;height:52px;border:3px dashed #845EC2;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;color:#ccc}
+  .odd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  .odd-card{background:#F3F0FF;border-radius:12px;padding:14px;text-align:center;border:2px solid #D5C8FF}
+  .odd-card .emoji{font-size:38px;display:block}
+  .odd-card .circle{width:24px;height:24px;border-radius:50%;border:2.5px solid #845EC2;margin:8px auto 0}
+
+  /* Stars row */
+  .stars-row{display:flex;justify-content:center;gap:18px;margin-top:24px;padding-top:18px;border-top:2px dashed #EEF0F5}
+  .star-rate{font-size:38px;opacity:.25;cursor:pointer}
+  .star-rate:hover{opacity:1}
+  .praise{text-align:center;font-size:14px;color:#8899AA;margin-top:10px}
+
+  .print-btn{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:50px;padding:14px 28px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 24px rgba(102,126,234,.4)}
+</style></head><body>
+
+<div class="header">
+  <div class="hdr-left">
+    <h1>📚 Phiếu Bài Tập</h1>
+    <p>Bé: <b>${name}</b> &nbsp;•&nbsp; Ngày: ${date} &nbsp;•&nbsp; ${STAGE_NAMES[stage]}</p>
+  </div>
+  <div class="hdr-right">
+    <div class="mascot-big">🦊</div>
+    <div>Suplo Edu</div>
+  </div>
+</div>
+
+<!-- MATH -->
+<div class="section">
+  <div class="sec-hdr math"><span style="font-size:24px">🔢</span><h2>Toán học — Đếm & So sánh</h2></div>
+  <div class="math-grid">
+    <div class="math-box"><div class="q">Đếm 🍎</div><span class="items">🍎🍎🍎</span><div class="ans-line"></div></div>
+    <div class="math-box"><div class="q">2 + 3 = ?</div><span class="items">🌟🌟 + 🌟🌟🌟</span><div class="ans-line"></div></div>
+    <div class="math-box"><div class="q">Đếm 🐝</div><span class="items">🐝🐝🐝🐝🐝🐝</span><div class="ans-line"></div></div>
+    <div class="math-box"><div class="q">1 + 4 = ?</div><span class="items">🎈 + 🎈🎈🎈🎈</span><div class="ans-line"></div></div>
+    <div class="math-box"><div class="q">Nhiều hơn?</div><span class="items" style="font-size:16px">A: 🐟🐟🐟<br>B: 🐟🐟🐟🐟🐟</span><div class="ans-line"></div></div>
+    <div class="math-box"><div class="q">3 + ? = 5</div><span class="items">🌸🌸🌸 + ?</span><div class="ans-line"></div></div>
+  </div>
+</div>
+
+<!-- ENGLISH -->
+<div class="section">
+  <div class="sec-hdr en"><span style="font-size:24px">🌍</span><h2>English — Animals & Colors</h2></div>
+  <div class="en-grid">
+    <div class="en-card"><span class="emoji">🐱</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
+    <div class="en-card"><span class="emoji">🐶</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
+    <div class="en-card"><span class="emoji">🐘</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
+    <div class="en-card"><span class="emoji">🦁</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:#555;margin:14px 0 8px">🎨 Color the circles and write the color name:</div>
+  <div class="color-row">
+    <div class="color-task"><div class="color-circle" style="background:#FF0000"></div><div class="color-line"></div></div>
+    <div class="color-task"><div class="color-circle" style="background:#339AF0"></div><div class="color-line"></div></div>
+    <div class="color-task"><div class="color-circle" style="background:#51CF66"></div><div class="color-line"></div></div>
+    <div class="color-task"><div class="color-circle" style="background:#FFE66D"></div><div class="color-line"></div></div>
+  </div>
+</div>
+
+<!-- VIETNAMESE -->
+<div class="section page-break">
+  <div class="sec-hdr vn"><span style="font-size:24px">🇻🇳</span><h2>Tiếng Việt — Chữ cái & Từ ngữ</h2></div>
+  <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:10px">✏️ Tô và viết lại chữ cái:</div>
+  <div class="vn-grid">
+    <div class="letter-trace"><span class="letter-big">A</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
+    <div class="letter-trace"><span class="letter-big">B</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
+    <div class="letter-trace"><span class="letter-big">M</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
+    <div class="letter-trace"><span class="letter-big">H</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:#555;margin:14px 0 8px">📝 Nhìn tranh — viết tên:</div>
+  <div class="vn-word-row">
+    <div class="vn-pair"><span class="vn-emoji">🌸</span><div class="vn-line"></div></div>
+    <div class="vn-pair"><span class="vn-emoji">🐱</span><div class="vn-line"></div></div>
+    <div class="vn-pair"><span class="vn-emoji">☀️</span><div class="vn-line"></div></div>
+    <div class="vn-pair"><span class="vn-emoji">🍎</span><div class="vn-line"></div></div>
+  </div>
+</div>
+
+<!-- LOGIC -->
+<div class="section">
+  <div class="sec-hdr logic"><span style="font-size:24px">🧩</span><h2>Tư duy Logic — Quy luật & Tìm khác biệt</h2></div>
+  <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:10px">🔍 Tìm hình tiếp theo:</div>
+  <div class="pat-row">
+    <span class="pat-em">🔴</span><span class="pat-em">🔵</span><span class="pat-em">🔴</span><span class="pat-em">🔵</span><span class="pat-em">🔴</span>
+    <span style="font-size:24px;font-weight:900;color:#845EC2">→</span>
+    <div class="pat-box-blank">❓</div>
+  </div>
+  <div class="pat-row">
+    <span class="pat-em">🌟</span><span class="pat-em">🌙</span><span class="pat-em">🌟</span><span class="pat-em">🌙</span><span class="pat-em">🌟</span>
+    <span style="font-size:24px;font-weight:900;color:#845EC2">→</span>
+    <div class="pat-box-blank">❓</div>
+  </div>
+  <div style="font-size:13px;font-weight:700;color:#555;margin:14px 0 10px">🔵 Khoanh tròn thứ KHÁC với các thứ còn lại:</div>
+  <div class="odd-grid">
+    <div class="odd-card"><span class="emoji">🍎</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="emoji">🍊</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="emoji">🚗</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="emoji">🍇</span><div class="circle"></div></div>
+  </div>
+</div>
+
+<!-- STARS ROW -->
+<div class="stars-row">
+  <span class="star-rate">⭐</span>
+  <span class="star-rate">⭐</span>
+  <span class="star-rate">⭐</span>
+  <span class="star-rate">⭐</span>
+  <span class="star-rate">⭐</span>
+</div>
+<div class="praise">Ba/Mẹ đánh giá: Chấm sao cho bé 🌟</div>
+
+<button class="print-btn" onclick="window.print()">🖨️ In phiếu bài tập</button>
+
+</body></html>`;
 }
 
 // ─────────────────────────────────────────────
 //  INIT
 // ─────────────────────────────────────────────
 window.addEventListener('load',()=>{
-  buildCal();
-  // Make sure home is visible, all others hidden
+  loadVoices();
+
+  if(P.setupDone){
+    // Skip onboarding, show home
+    document.getElementById('screen-onboard').classList.remove('active');
+    document.getElementById('screen-onboard').style.transform='translateX(-100%)';
+    document.getElementById('screen-onboard').style.opacity='0';
+    document.getElementById('screen-home').classList.add('active');
+    document.getElementById('screen-home').style.transform='translateX(0)';
+    document.getElementById('screen-home').style.opacity='1';
+    currentScreenId='home';
+    updateHomeUI();
+  } else {
+    // Show onboarding
+    currentScreenId='onboard';
+    document.getElementById('screen-onboard').classList.add('active');
+    document.getElementById('screen-onboard').style.transform='translateX(0)';
+    document.getElementById('screen-onboard').style.opacity='1';
+    // Init age preview
+    document.getElementById('ob-preview-text').textContent = STAGE_NAMES[calcStage(obAgeY,obAgeM)];
+  }
+
+  // Ensure non-active screens are off-screen
   document.querySelectorAll('.screen').forEach(s=>{
-    if(s.id!=='screen-home'){
-      s.classList.remove('active');
+    if(!s.classList.contains('active')){
       s.style.transform='translateX(100%)';
       s.style.opacity='0';
     }
@@ -819,7 +1414,7 @@ window.addEventListener('load',()=>{
 
 // Prevent double-tap zoom on iOS
 document.addEventListener('touchend', e=>{
-  if(e.target.tagName==='BUTTON') e.preventDefault();
+  if(e.target.tagName==='BUTTON'||e.target.tagName==='INPUT') e.preventDefault();
 }, {passive:false});
 </script>
 </body>
