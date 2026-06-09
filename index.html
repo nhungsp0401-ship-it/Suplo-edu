@@ -254,6 +254,27 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
 .ws-fab{position:fixed;bottom:80px;right:18px;width:52px;height:52px;border-radius:50%;background:linear-gradient(135deg,#F093FB,#F5576C);border:none;cursor:pointer;font-size:22px;box-shadow:0 4px 18px rgba(240,93,251,.4);z-index:20;display:none;align-items:center;justify-content:center;transition:transform .15s}
 .ws-fab:active{transform:scale(.9)}
 .ws-fab.show{display:flex}
+
+/* ===== STORIES TAB ===== */
+.stories-hero{background:linear-gradient(135deg,#845EC2,#F06595);padding:22px 20px 28px;border-radius:0 0 34px 34px;color:#fff;flex-shrink:0;text-align:center}
+.stories-hero h2{font-size:21px;font-weight:900}
+.stories-hero p{font-size:12.5px;opacity:.85;margin-top:4px}
+.story-grid{display:grid;grid-template-columns:1fr 1fr;gap:13px;padding:16px 14px 14px}
+.story-card{border-radius:20px;padding:18px 13px;cursor:pointer;transition:transform .15s;border:none;text-align:center;position:relative;border:2.5px solid transparent}
+.story-card:active{transform:scale(.94)}
+.story-card-emo{font-size:48px;display:block;margin-bottom:8px;line-height:1.1}
+.story-card-title{font-size:13px;font-weight:900;color:var(--text);line-height:1.35}
+.story-card-desc{font-size:10.5px;color:var(--muted);margin-top:3px;line-height:1.4}
+
+/* Story reader */
+.story-emo{font-size:100px;text-align:center;line-height:1.1;animation:popin .4s ease;display:block}
+.story-text{font-size:17px;font-weight:600;color:var(--text);line-height:1.7;text-align:center;background:var(--white);border-radius:20px;padding:20px 18px;box-shadow:var(--shadow);width:100%}
+.story-q{font-size:19px;font-weight:800;color:var(--text);text-align:center;line-height:1.5;padding:0 4px}
+.story-nav{display:flex;gap:12px;width:100%;justify-content:space-between}
+.story-prev{flex:1;background:#F0F4FF;color:var(--text);border:2px solid var(--border);border-radius:16px;padding:16px;font-size:15px;font-weight:800;cursor:pointer;transition:transform .15s}
+.story-next{flex:2;background:linear-gradient(135deg,#845EC2,#667eea);color:#fff;border:none;border-radius:16px;padding:16px;font-size:15px;font-weight:900;cursor:pointer;box-shadow:0 4px 16px rgba(132,94,194,.35);transition:transform .15s}
+.story-prev:active,.story-next:active{transform:scale(.96)}
+.story-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;gap:16px;min-height:0;overflow-y:auto}
 </style>
 </head>
 <body>
@@ -383,6 +404,7 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
   <nav class="bnav">
     <button class="bnav-btn on" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
     <button class="bnav-btn" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn" onclick="nav('stories')"><span class="ni">📖</span>Truyện</button>
     <button class="bnav-btn" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
   </nav>
 </div>
@@ -456,6 +478,7 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
   <nav class="bnav">
     <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
     <button class="bnav-btn on" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn" onclick="nav('stories')"><span class="ni">📖</span>Truyện</button>
     <button class="bnav-btn" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
   </nav>
 </div>
@@ -521,8 +544,36 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
   <nav class="bnav">
     <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
     <button class="bnav-btn" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn" onclick="nav('stories')"><span class="ni">📖</span>Truyện</button>
     <button class="bnav-btn on" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
   </nav>
+</div>
+
+<!-- ============ STORIES LIST ============ -->
+<div class="screen" id="screen-stories">
+  <div class="stories-hero">
+    <h2>📖 Góc Đọc Truyện</h2>
+    <p>Nghe kể — Khám phá — Trả lời câu hỏi thú vị</p>
+  </div>
+  <div class="story-grid" id="story-grid-inner"></div>
+  <div class="spacer"></div>
+  <nav class="bnav">
+    <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
+    <button class="bnav-btn" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn on" onclick="nav('stories')"><span class="ni">📖</span>Truyện</button>
+    <button class="bnav-btn" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
+  </nav>
+</div>
+
+<!-- ============ STORY READER ============ -->
+<div class="screen" id="screen-story-reader">
+  <div class="les-hdr" id="story-hdr">
+    <button class="btn-back" onclick="nav('stories')">←</button>
+    <div class="lpbar"><div class="lpfill" id="story-prog" style="width:0%"></div></div>
+    <span class="lp-txt" id="story-lp-txt">1/1</span>
+    <button class="tts-btn" id="story-tts-btn" onclick="reSpeakStory()">🔊</button>
+  </div>
+  <div class="story-wrap" id="story-wrap-inner"></div>
 </div>
 
 <!-- ============ FEEDBACK OVERLAY ============ -->
@@ -820,7 +871,7 @@ function sndTap(){  beep(440,.07,'sine',.12); }
 // ─────────────────────────────────────────────
 //  SCREEN NAV
 // ─────────────────────────────────────────────
-const navOrder = ['home','roadmap','parent'];
+const navOrder = ['home','roadmap','stories','parent'];
 let currentScreenId = 'onboard';
 
 function nav(id){
@@ -829,6 +880,7 @@ function nav(id){
   _transition(id, next >= prev ? 'right' : 'left');
   if(id==='roadmap') updateRoadmap();
   if(id==='parent')  updateParentUI();
+  if(id==='stories') renderStories();
 }
 
 function goHome(){
@@ -1523,6 +1575,265 @@ function wsLogic(name, date, stage){
   <div class="star-row"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
   <div class="praise">Ba/Mẹ chấm điểm cho bé nhé! ⭐</div>
   </body></html>`;
+}
+
+// ─────────────────────────────────────────────
+//  STORIES
+// ─────────────────────────────────────────────
+const STORIES = [
+  {
+    id:'alice', emoji:'🐇', color:'#E8D5FF', title:'Alice & Chú Thỏ Trắng',
+    desc:'Phiêu lưu xứ thần kỳ',
+    pages:[
+      { emo:'🌸', text:'Alice đang ngồi dưới gốc cây thì thấy một chú thỏ trắng chạy vụt qua. Chú thỏ mặc áo vest đỏ, cầm đồng hồ và kêu: "Muộn rồi! Muộn rồi!"' },
+      { emo:'🕳️', text:'Alice tò mò chạy theo chú thỏ và vô tình rơi xuống một cái hang thật sâu. Hang tối nhưng kỳ lạ — đồ vật bay lơ lửng xung quanh!' },
+      { emo:'🚪', text:'Dưới đáy hang, Alice thấy một căn phòng nhỏ với nhiều cánh cửa đủ màu sắc. Mỗi cánh cửa dẫn đến một thế giới khác nhau.' },
+      { emo:'🍄', text:'Alice uống một chai nhỏ ghi "Hãy uống tôi" và bỗng thu nhỏ lại như con kiến. Thế giới xung quanh trở nên thật to lớn và kỳ diệu!' },
+      { emo:'🎩', text:'Cuối cùng Alice tìm được chú thỏ trắng ở bữa tiệc trà của bác Hatter điên. Mọi người cùng hát, cùng cười và uống trà thật vui vẻ!' }
+    ],
+    quiz:[
+      { q:'Chú thỏ trắng mặc gì?', opts:['Áo vest đỏ','Áo xanh','Váy hồng','Áo trắng'], ans:0 },
+      { q:'Alice rơi xuống đâu?', opts:['Xuống hồ','Xuống hang sâu','Xuống biển','Xuống giếng'], ans:1 },
+      { q:'Alice uống chai nhỏ thì điều gì xảy ra?', opts:['Lớn hơn','Bay lên','Thu nhỏ lại','Biến mất'], ans:2 },
+      { q:'Alice gặp chú thỏ ở đâu?', opts:['Bữa tiệc trà','Trong rừng','Dưới biển','Trên núi'], ans:0 }
+    ]
+  },
+  {
+    id:'cinderella', emoji:'👠', color:'#FFE8F5', title:'Cô Bé Lọ Lem',
+    desc:'Câu chuyện về lòng tốt',
+    pages:[
+      { emo:'🏠', text:'Cô bé Lọ Lem sống với mẹ kế độc ác và hai chị gái kiêu ngạo. Cô phải làm việc suốt ngày: quét nhà, nấu cơm, giặt quần áo.' },
+      { emo:'✨', text:'Một hôm, hoàng tử mở dạ tiệc lớn. Hai chị được đi nhưng Lọ Lem thì không. Cô ngồi khóc một mình bên bếp tàn.' },
+      { emo:'🧚', text:'Bỗng bà tiên xuất hiện! Bà hoá phép chiếc xe bí ngô thành cỗ xe vàng óng, và may cho Lọ Lem bộ váy đẹp nhất thế gian.' },
+      { emo:'💃', text:'Lọ Lem đến dạ tiệc. Hoàng tử thấy cô liền đem lòng yêu mến. Hai người cùng nhảy múa dưới ánh nến lung linh.' },
+      { emo:'👑', text:'Khi đồng hồ điểm 12 giờ, Lọ Lem vội chạy, đánh rơi một chiếc giày thuỷ tinh. Hoàng tử đi tìm khắp nơi và cuối cùng tìm được cô gái của mình!' }
+    ],
+    quiz:[
+      { q:'Lọ Lem sống với ai?', opts:['Mẹ kế và hai chị','Bố và em trai','Bà và ông','Một mình'], ans:0 },
+      { q:'Ai giúp Lọ Lem đến dạ tiệc?', opts:['Hoàng tử','Bà tiên','Hai chị','Mẹ kế'], ans:1 },
+      { q:'Cỗ xe của Lọ Lem được làm từ gì?', opts:['Gỗ vàng','Bí ngô','Đá quý','Pha lê'], ans:1 },
+      { q:'Lọ Lem đánh rơi gì khi chạy?', opts:['Chiếc vòng','Chiếc nón','Chiếc giày','Chiếc túi'], ans:2 }
+    ]
+  },
+  {
+    id:'pigs', emoji:'🐷', color:'#FFF0E8', title:'Ba Chú Lợn Con',
+    desc:'Kiên nhẫn và chăm chỉ',
+    pages:[
+      { emo:'🏡', text:'Ba chú lợn con rời nhà ra ở riêng. Mỗi chú tự xây nhà cho mình. Chú Cún lười nhất, xây nhà rơm rất nhanh để đi chơi.' },
+      { emo:'🏗️', text:'Chú Bin xây nhà gỗ mất hai ngày. Chú Bao chăm chỉ nhất, mất cả tuần để xây nhà gạch thật chắc chắn.' },
+      { emo:'🐺', text:'Chó sói to lớn đến thổi ngã nhà rơm của Cún chỉ một cái phù! Cún chạy sang nhà Bin. Sói thổi tiếp — nhà gỗ cũng đổ!' },
+      { emo:'🧱', text:'Hai chú chạy vào nhà gạch của Bao. Sói thổi thật mạnh nhưng nhà gạch đứng vững. Sói tức giận bỏ đi.' },
+      { emo:'🤝', text:'Ba chú lợn vui mừng ôm nhau. Từ đó Cún và Bin hiểu ra: làm việc chăm chỉ và cẩn thận luôn luôn đúng!' }
+    ],
+    quiz:[
+      { q:'Chú lợn nào xây nhà gạch?', opts:['Cún','Bin','Bao','Cả ba'], ans:2 },
+      { q:'Ai thổi ngã những ngôi nhà?', opts:['Gió bão','Chó sói','Mưa to','Hàng xóm'], ans:1 },
+      { q:'Ngôi nhà nào đứng vững?', opts:['Nhà rơm','Nhà gỗ','Nhà gạch','Nhà lá'], ans:2 },
+      { q:'Ba chú lợn học được bài học gì?', opts:['Nên ngủ nhiều','Nên chạy nhanh','Nên chăm chỉ','Nên ăn nhiều'], ans:2 }
+    ]
+  },
+  {
+    id:'hood', emoji:'🌹', color:'#FFE8E8', title:'Cô Bé Quàng Khăn Đỏ',
+    desc:'Không nói chuyện với người lạ',
+    pages:[
+      { emo:'🧺', text:'Cô bé có chiếc khăn đỏ đẹp lắm nên ai cũng gọi là Khăn Đỏ. Hôm nay cô xách giỏ bánh đi thăm bà ngoại bị ốm.' },
+      { emo:'🌲', text:'Trong rừng, cô gặp chó sói. Sói hỏi cô đi đâu. Mẹ đã dặn không nói chuyện với người lạ, nhưng Khăn Đỏ quên mất và kể hết cho sói nghe.' },
+      { emo:'🐺', text:'Sói chạy tắt đến nhà bà trước, lừa bà mở cửa rồi nhốt bà vào tủ. Sói giả làm bà nằm trên giường chờ Khăn Đỏ.' },
+      { emo:'👀', text:'Khăn Đỏ thấy "bà" có tai to, mắt to, răng to liền hỏi. Sói nhảy ra! Khăn Đỏ hét to và bác thợ săn nghe thấy chạy đến kịp thời.' },
+      { emo:'🎉', text:'Bác thợ săn cứu bà và đuổi sói đi mãi. Khăn Đỏ ôm bà khóc rồi hứa: từ nay sẽ luôn nghe lời mẹ dặn!' }
+    ],
+    quiz:[
+      { q:'Khăn Đỏ đi đâu trong câu chuyện?', opts:['Thăm bà ngoại','Đi học','Đi chợ','Đi chơi công viên'], ans:0 },
+      { q:'Sói giả làm ai?', opts:['Bác thợ săn','Mẹ Khăn Đỏ','Bà ngoại','Ông ngoại'], ans:2 },
+      { q:'Ai cứu Khăn Đỏ và bà?', opts:['Cảnh sát','Bác thợ săn','Hàng xóm','Bố Khăn Đỏ'], ans:1 },
+      { q:'Bài học của câu chuyện là gì?', opts:['Nên đi nhanh hơn','Không nói chuyện với người lạ','Nên mang nhiều bánh','Nên hét thật to'], ans:1 }
+    ]
+  },
+  {
+    id:'tortoise', emoji:'🐢', color:'#E8F5E8', title:'Rùa và Thỏ',
+    desc:'Kiên trì là chiến thắng',
+    pages:[
+      { emo:'🐇', text:'Thỏ chạy nhanh nhất rừng, ai cũng biết. Thỏ thường khoe khoang và chọc ghẹo Rùa chậm chạp: "Rùa ơi, chân mày sao mà chậm thế!"' },
+      { emo:'🏁', text:'Rùa bình tĩnh thách Thỏ chạy thi từ gốc cây sồi đến đỉnh đồi. Thỏ cười to: "Ha ha! Được thôi, tao sẽ đợi mày ở đích!"' },
+      { emo:'💨', text:'Cuộc đua bắt đầu! Thỏ phóng nhanh như gió. Được nửa đường, Thỏ thấy Rùa còn rất xa, liền nằm xuống bãi cỏ xanh ngủ một giấc.' },
+      { emo:'🐢', text:'Rùa không dừng lại. Cứ từng bước, từng bước chậm rãi nhưng đều đặn. Rùa đi qua chỗ Thỏ đang ngủ say.' },
+      { emo:'🏆', text:'Khi Thỏ choàng dậy, Rùa đã về đích rồi! Cả rừng vỗ tay hoan hô. Thỏ xấu hổ lắm. Rùa nói: "Kiên trì và không bỏ cuộc — đó mới là chiến thắng thật sự!"' }
+    ],
+    quiz:[
+      { q:'Ai thách chạy thi trước?', opts:['Thỏ','Rùa','Sư tử','Cáo'], ans:1 },
+      { q:'Tại sao Thỏ thua?', opts:['Chạy nhầm đường','Bị ngã','Ngủ quên giữa đường','Bỏ cuộc'], ans:2 },
+      { q:'Rùa thắng nhờ điều gì?', opts:['Chạy thật nhanh','Kiên trì không dừng','Gian lận','May mắn'], ans:1 },
+      { q:'Bài học của câu chuyện là gì?', opts:['Nên ngủ đủ giấc','Không nên khoe khoang','Kiên trì sẽ chiến thắng','Nên chạy thật nhanh'], ans:2 }
+    ]
+  }
+];
+
+let storyState = { storyIdx:0, pageIdx:0, mode:'read', quizIdx:0, quizScore:0 };
+
+function renderStories(){
+  const grid = document.getElementById('story-grid-inner');
+  const colors = ['#E8D5FF','#FFE8F5','#FFF0E8','#FFE8E8','#E8F5E8'];
+  grid.innerHTML = STORIES.map((s,i)=>`
+    <button class="story-card" style="background:${s.color}" onclick="openStory(${i})">
+      <span class="story-card-emo">${s.emoji}</span>
+      <div class="story-card-title">${s.title}</div>
+      <div class="story-card-desc">${s.desc}</div>
+    </button>`).join('');
+}
+
+function openStory(idx){
+  storyState = { storyIdx:idx, pageIdx:0, mode:'read', quizIdx:0, quizScore:0 };
+  _transition('story-reader','right');
+  renderStoryPage();
+}
+
+function reSpeakStory(){
+  const s = STORIES[storyState.storyIdx];
+  if(storyState.mode==='read'){
+    const pg = s.pages[storyState.pageIdx];
+    speakText(pg.text,'vi');
+  } else {
+    const q = s.quiz[storyState.quizIdx];
+    speakText(q.q,'vi');
+  }
+}
+
+function speakText(text, lang){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const u = new SpeechSynthesisUtterance(_cleanText(text));
+  u.lang = lang==='en' ? 'en-US' : 'vi-VN';
+  u.rate = lang==='en' ? 0.68 : 0.82;
+  u.pitch = lang==='en' ? 1.05 : 1.1;
+  const v = lang==='en' ? voices.en : voices.vi;
+  if(v) u.voice = v;
+  const btn = document.getElementById('story-tts-btn');
+  if(btn){ btn.classList.add('speaking'); u.onend = ()=>btn.classList.remove('speaking'); }
+  window.speechSynthesis.speak(u);
+}
+
+function renderStoryPage(){
+  const s = STORIES[storyState.storyIdx];
+  const totalPages = s.pages.length + s.quiz.length;
+  const pageNum = storyState.pageIdx + 1;
+  const prog = (pageNum / s.pages.length) * 100;
+
+  document.getElementById('story-prog').style.width = prog + '%';
+  document.getElementById('story-lp-txt').textContent = pageNum + '/' + s.pages.length;
+
+  const pg = s.pages[storyState.pageIdx];
+  const isFirst = storyState.pageIdx === 0;
+  const isLast  = storyState.pageIdx === s.pages.length - 1;
+
+  const wrap = document.getElementById('story-wrap-inner');
+  wrap.innerHTML = `
+    <span class="story-emo">${pg.emo}</span>
+    <div class="story-text">${pg.text}</div>
+    <div class="story-nav">
+      ${isFirst
+        ? `<button class="story-prev" onclick="nav('stories')">← Danh sách</button>`
+        : `<button class="story-prev" onclick="prevStoryPage()">← Trước</button>`}
+      ${isLast
+        ? `<button class="story-next" onclick="startStoryQuiz()">Trả lời câu hỏi →</button>`
+        : `<button class="story-next" onclick="nextStoryPage()">Tiếp theo →</button>`}
+    </div>`;
+
+  setTimeout(()=>speakText(pg.text,'vi'), 400);
+}
+
+function nextStoryPage(){
+  const s = STORIES[storyState.storyIdx];
+  if(storyState.pageIdx < s.pages.length - 1){
+    storyState.pageIdx++;
+    renderStoryPage();
+  }
+}
+
+function prevStoryPage(){
+  if(storyState.pageIdx > 0){
+    storyState.pageIdx--;
+    renderStoryPage();
+  }
+}
+
+function startStoryQuiz(){
+  storyState.mode = 'quiz';
+  storyState.quizIdx = 0;
+  storyState.quizScore = 0;
+  renderStoryQuiz();
+}
+
+function renderStoryQuiz(){
+  const s = STORIES[storyState.storyIdx];
+  const q = s.quiz[storyState.quizIdx];
+  const total = s.quiz.length;
+  const prog = (storyState.quizIdx / total) * 100;
+
+  document.getElementById('story-prog').style.width = prog + '%';
+  document.getElementById('story-lp-txt').textContent = 'C' + (storyState.quizIdx+1) + '/' + total;
+
+  const wrap = document.getElementById('story-wrap-inner');
+  wrap.innerHTML = `
+    <div class="ex-hint">Câu hỏi ${storyState.quizIdx+1}/${total}</div>
+    <div class="story-q">${q.q}</div>
+    <div class="opts c2">${q.opts.map((o,i)=>`
+      <button class="opt-btn" id="sq-${i}" onclick="answerStoryQ(${i})">${o}</button>`).join('')}
+    </div>`;
+
+  setTimeout(()=>speakText(q.q,'vi'), 350);
+}
+
+function answerStoryQ(chosen){
+  const s = STORIES[storyState.storyIdx];
+  const q = s.quiz[storyState.quizIdx];
+  const correct = q.ans;
+  const btn = document.getElementById('sq-'+chosen);
+  const btnOk = document.getElementById('sq-'+correct);
+
+  document.querySelectorAll('#story-wrap-inner .opt-btn').forEach(b=>{ b.style.pointerEvents='none'; });
+
+  if(chosen===correct){
+    btn.classList.add('ok');
+    storyState.quizScore++;
+    speakText('Đúng rồi! Giỏi quá!','vi');
+  } else {
+    btn.classList.add('no');
+    btnOk.classList.add('ok');
+    speakText('Chưa đúng. Đáp án là: ' + q.opts[correct],'vi');
+  }
+
+  setTimeout(()=>{
+    storyState.quizIdx++;
+    if(storyState.quizIdx >= s.quiz.length){
+      finishStory();
+    } else {
+      renderStoryQuiz();
+    }
+  }, 1600);
+}
+
+function finishStory(){
+  const s = STORIES[storyState.storyIdx];
+  const score = storyState.quizScore;
+  const total = s.quiz.length;
+  const starsEarned = score >= total ? 3 : score >= Math.ceil(total/2) ? 2 : 1;
+  P.stars += starsEarned * 3;
+  saveP();
+
+  const stars = '⭐'.repeat(starsEarned) + '☆'.repeat(3-starsEarned);
+  const wrap = document.getElementById('story-wrap-inner');
+  wrap.innerHTML = `
+    <span style="font-size:80px;animation:cel .6s ease">🎉</span>
+    <div style="font-size:22px;font-weight:900;color:var(--text);text-align:center">Đọc truyện xong rồi!</div>
+    <div style="font-size:36px;text-align:center;letter-spacing:4px">${stars}</div>
+    <div style="font-size:15px;color:var(--muted);text-align:center">Trả lời đúng ${score}/${total} câu &nbsp;·&nbsp; +${starsEarned*3} ⭐</div>
+    <div style="display:flex;gap:12px;width:100%;flex-direction:column;margin-top:8px">
+      <button class="story-next" style="flex:none" onclick="openStory(${storyState.storyIdx})">Đọc lại 🔁</button>
+      <button class="story-prev" style="flex:none;width:100%;text-align:center" onclick="nav('stories')">← Chọn truyện khác</button>
+    </div>`;
+
+  document.getElementById('story-prog').style.width='100%';
+  speakText('Chúc mừng! Con đã đọc xong câu chuyện rồi!','vi');
 }
 
 // ─────────────────────────────────────────────
