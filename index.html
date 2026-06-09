@@ -1,0 +1,826 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Suplo Edu — Bé Học Vui 🌟</title>
+<style>
+/* ===== RESET ===== */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --red:#FF6B6B;--teal:#4ECDC4;--yellow:#FFE66D;--green:#51CF66;
+  --purple:#845EC2;--orange:#FF9F43;--blue:#339AF0;--pink:#F06595;
+  --bg:#F0F4FF;--white:#FFF;--text:#2B3A4B;--muted:#8899AA;
+  --border:#E8EDF5;--shadow:0 4px 20px rgba(0,0,0,.09);--r:20px;--rs:12px
+}
+html,body{height:100%;background:linear-gradient(135deg,#667eea,#764ba2);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;-webkit-tap-highlight-color:transparent;user-select:none}
+
+/* ===== APP SHELL ===== */
+#app{max-width:430px;margin:0 auto;height:100vh;background:var(--bg);position:relative;overflow:hidden;box-shadow:0 0 80px rgba(0,0,0,.35)}
+
+/* ===== SCREENS ===== */
+.screen{position:absolute;inset:0;display:flex;flex-direction:column;background:var(--bg);
+  transition:transform .32s cubic-bezier(.4,0,.2,1),opacity .32s ease;
+  transform:translateX(100%);opacity:0;pointer-events:none;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.screen.active{transform:translateX(0);opacity:1;pointer-events:all}
+.screen.exit{transform:translateX(-30%);opacity:0}
+
+/* ===== BOTTOM NAV ===== */
+.bnav{display:flex;background:var(--white);border-top:1.5px solid var(--border);flex-shrink:0;position:sticky;bottom:0;z-index:10}
+.bnav-btn{flex:1;display:flex;flex-direction:column;align-items:center;padding:9px 0 11px;border:none;background:none;cursor:pointer;color:var(--muted);font-size:10.5px;font-weight:700;letter-spacing:.3px;transition:color .2s}
+.bnav-btn .ni{font-size:21px;margin-bottom:2px}
+.bnav-btn.on{color:var(--blue)}
+
+/* ===== HOME ===== */
+.hero{background:linear-gradient(135deg,#667eea,#764ba2);padding:22px 20px 30px;border-radius:0 0 36px 36px;color:#fff;position:relative;overflow:hidden;flex-shrink:0}
+.hero::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:rgba(255,255,255,.08);border-radius:50%}
+.hero::after{content:'';position:absolute;bottom:-30px;left:10px;width:120px;height:120px;background:rgba(255,255,255,.06);border-radius:50%}
+.hero-greet{font-size:13px;opacity:.8;margin-bottom:3px}
+.hero-name{font-size:24px;font-weight:900;margin-bottom:14px}
+.stars-pill{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.22);border-radius:50px;padding:7px 16px;backdrop-filter:blur(6px)}
+.stars-val{font-size:19px;font-weight:900}
+.mascot{position:absolute;right:16px;bottom:0;font-size:78px;line-height:1;animation:bob 2.4s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+
+.sec-title{font-size:15px;font-weight:800;color:var(--text);padding:18px 18px 10px}
+.subj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:0 14px 14px}
+.subj-card{border-radius:var(--r);padding:18px 15px;cursor:pointer;transition:transform .15s;border:none;text-align:left;position:relative;overflow:hidden}
+.subj-card:active{transform:scale(.95)}
+.subj-card .si{font-size:38px;display:block;margin-bottom:9px}
+.subj-card .sn{font-size:14px;font-weight:800;color:var(--text)}
+.subj-card .sl{font-size:11px;color:var(--muted);margin-top:2px}
+.subj-card .spb{height:4px;border-radius:2px;background:rgba(0,0,0,.08);margin-top:10px}
+.subj-card .spf{height:100%;border-radius:2px}
+.sc-math{background:#FFF0F0}.sc-math .spf{background:var(--red)}
+.sc-en{background:#F0FFF4}.sc-en .spf{background:var(--green)}
+.sc-vn{background:#FFF8E1}.sc-vn .spf{background:#DEAD00}
+.sc-lg{background:#F3F0FF}.sc-lg .spf{background:var(--purple)}
+
+.miss-list{padding:0 14px 14px}
+.miss-item{display:flex;align-items:center;gap:12px;background:var(--white);border-radius:16px;padding:13px 14px;margin-bottom:10px;box-shadow:var(--shadow);cursor:pointer;transition:transform .15s}
+.miss-item:active{transform:scale(.97)}
+.miss-ico{width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:21px;flex-shrink:0}
+.miss-inf{flex:1}
+.miss-t{font-size:13.5px;font-weight:700;color:var(--text)}
+.miss-d{font-size:11.5px;color:var(--muted);margin-top:1px}
+.miss-star{font-size:12px;font-weight:800;color:#C9920A}
+
+/* ===== LESSON HEADER ===== */
+.les-hdr{display:flex;align-items:center;gap:10px;padding:12px 16px;background:var(--white);border-bottom:1.5px solid var(--border);flex-shrink:0;position:sticky;top:0;z-index:5}
+.btn-back{width:38px;height:38px;border-radius:50%;border:none;background:#F0F4FF;cursor:pointer;font-size:17px;display:flex;align-items:center;justify-content:center;transition:transform .15s,background .15s;flex-shrink:0}
+.btn-back:active{transform:scale(.88);background:#DDE4F5}
+.lpbar{flex:1;height:8px;background:#EEF0F5;border-radius:4px;overflow:hidden}
+.lpfill{height:100%;background:linear-gradient(90deg,var(--blue),var(--purple));border-radius:4px;transition:width .5s ease}
+.lp-txt{font-size:12px;font-weight:800;color:var(--muted);white-space:nowrap}
+
+/* ===== EXERCISE AREA ===== */
+.ex-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:22px 18px 28px;gap:18px;min-height:0}
+.ex-q{text-align:center;font-size:18px;font-weight:800;color:var(--text);line-height:1.4}
+.ex-hint{font-size:12.5px;color:var(--muted);text-align:center}
+
+/* count box */
+.cnt-box{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%;min-height:90px;align-content:center}
+.cnt-item{font-size:38px;cursor:pointer;transition:transform .12s;animation:popin .3s ease backwards}
+.cnt-item:active,.cnt-item.lit{transform:scale(1.35);filter:drop-shadow(0 0 10px rgba(81,207,102,.9))}
+@keyframes popin{from{transform:scale(0) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
+
+/* add row */
+.add-row{display:flex;align-items:center;flex-wrap:wrap;gap:6px;justify-content:center;padding:16px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%}
+.add-op{font-size:28px;font-weight:900;color:var(--blue)}
+
+/* compare */
+.cmp-row{display:flex;gap:10px;width:100%}
+.cmp-grp{flex:1;background:var(--white);border-radius:16px;padding:12px;text-align:center;box-shadow:var(--shadow)}
+.cmp-lbl{font-weight:800;font-size:12px;color:var(--muted);margin-bottom:6px}
+
+/* color swatch */
+.color-swatch{width:130px;height:130px;border-radius:30px;box-shadow:var(--shadow);animation:popin .4s ease}
+
+/* vocab card */
+.vocab-card{width:100%;background:var(--white);border-radius:24px;box-shadow:var(--shadow);padding:22px;text-align:center}
+.vocab-img{font-size:76px;display:block;margin-bottom:10px}
+.vocab-q{font-size:15px;font-weight:700;color:var(--text)}
+
+/* pattern */
+.pat-box{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%}
+.pat-item{font-size:34px}
+.pat-miss{width:50px;height:50px;border:3px dashed var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:22px;animation:pulse-bdr 1.5s ease-in-out infinite}
+@keyframes pulse-bdr{0%,100%{border-color:var(--blue)}50%{border-color:var(--purple)}}
+
+/* options */
+.opts{display:grid;gap:10px;width:100%}
+.opts.c3{grid-template-columns:repeat(3,1fr)}
+.opts.c2{grid-template-columns:repeat(2,1fr)}
+.opt-btn{border:3px solid transparent;border-radius:16px;padding:14px 10px;font-size:18px;font-weight:800;cursor:pointer;background:var(--white);box-shadow:0 3px 12px rgba(0,0,0,.08);color:var(--text);transition:transform .12s,box-shadow .12s;display:flex;align-items:center;justify-content:center;gap:6px}
+.opt-btn:active{transform:scale(.93)}
+.opt-btn.ok{background:var(--green);border-color:var(--green);color:#fff;animation:ok-bounce .45s ease}
+.opt-btn.no{background:#FFE8E8;border-color:var(--red);animation:no-shake .45s ease}
+@keyframes ok-bounce{0%{transform:scale(1)}35%{transform:scale(1.12)}70%{transform:scale(.97)}100%{transform:scale(1.05)}}
+@keyframes no-shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+
+/* ===== FEEDBACK OVERLAY ===== */
+#fb-ov{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);z-index:50;opacity:0;pointer-events:none;transition:opacity .25s}
+#fb-ov.show{opacity:1;pointer-events:all}
+#fb-emoji{font-size:90px;animation:cel .55s ease}
+#fb-text{font-size:26px;font-weight:900;color:var(--text);margin-top:14px}
+#fb-sub{font-size:14px;color:var(--muted);margin-top:6px}
+@keyframes cel{from{transform:scale(0) rotate(-20deg)}65%{transform:scale(1.25) rotate(8deg)}85%{transform:scale(.95) rotate(-4deg)}to{transform:scale(1)}}
+
+/* star particles */
+.star-p{position:absolute;pointer-events:none;font-size:22px;z-index:55;animation:sfx 1.6s ease-in forwards}
+@keyframes sfx{0%{opacity:1;transform:translateY(0) rotate(0) scale(1)}100%{opacity:0;transform:translateY(220px) rotate(360deg) scale(.5)}}
+
+/* ===== COMPLETION ===== */
+#screen-completion{align-items:center;justify-content:center;text-align:center;padding:40px 22px;background:linear-gradient(135deg,#667eea,#764ba2)}
+.comp-emoji{font-size:86px;animation:cel .7s ease}
+.comp-title{font-size:30px;font-weight:900;color:#fff;margin-top:18px}
+.comp-sub{font-size:15px;color:rgba(255,255,255,.8);margin-top:6px}
+.comp-stars{display:flex;gap:10px;margin:22px 0;justify-content:center}
+.comp-s{font-size:38px;animation:s-pop .5s ease backwards}
+.comp-s:nth-child(2){animation-delay:.14s}
+.comp-s:nth-child(3){animation-delay:.28s}
+@keyframes s-pop{from{transform:scale(0);opacity:0}70%{transform:scale(1.3)}to{transform:scale(1);opacity:1}}
+.comp-earned{color:rgba(255,255,255,.85);font-size:15px;margin-bottom:22px}
+.comp-btn{background:#fff;color:#764ba2;border:none;border-radius:18px;padding:17px 38px;font-size:16px;font-weight:900;cursor:pointer;transition:transform .15s;box-shadow:0 6px 24px rgba(0,0,0,.2)}
+.comp-btn:active{transform:scale(.96)}
+
+/* ===== ROADMAP ===== */
+.road-hero{background:linear-gradient(135deg,#F093FB,#F5576C);padding:22px 20px 28px;border-radius:0 0 34px 34px;color:#fff;text-align:center;flex-shrink:0}
+.road-hero h2{font-size:21px;font-weight:900}
+.road-hero p{font-size:12.5px;opacity:.85;margin-top:4px}
+.road-body{padding:18px 16px 80px}
+
+.stage-card{background:var(--white);border-radius:var(--r);margin-bottom:14px;box-shadow:var(--shadow);overflow:hidden}
+.stage-hdr{padding:15px 16px;display:flex;align-items:center;gap:13px}
+.stage-num{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:900;color:#fff;flex-shrink:0}
+.stage-inf{flex:1}
+.stage-name{font-size:15px;font-weight:800;color:var(--text)}
+.stage-age{font-size:11px;color:var(--muted);margin-top:2px}
+.stage-badge{font-size:11px;font-weight:800;padding:4px 10px;border-radius:50px;white-space:nowrap}
+.stage-body{padding:0 16px 16px}
+.skill-tags{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px}
+.skill-tag{font-size:11.5px;font-weight:600;padding:4px 11px;border-radius:50px;background:var(--bg);color:var(--text)}
+.stl{height:5px;background:#EEF0F5;border-radius:3px;overflow:hidden}
+.stlf{height:100%;border-radius:3px;transition:width 1.2s ease}
+
+.schools-row{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:10px}
+.sch-card{background:var(--white);border-radius:16px;padding:14px 10px;text-align:center;box-shadow:var(--shadow)}
+.sch-ico{font-size:26px}
+.sch-name{font-size:10.5px;font-weight:700;color:var(--text);margin-top:5px;line-height:1.4}
+.sch-pct{font-size:18px;font-weight:900;margin-top:4px}
+
+/* ===== PARENT DASHBOARD ===== */
+.dash-hero{background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);padding:22px 18px 26px;border-radius:0 0 34px 34px;color:#fff;flex-shrink:0}
+.dash-hero h2{font-size:19px;font-weight:900;margin-bottom:2px}
+.dash-sub{font-size:12px;opacity:.65;margin-bottom:18px}
+.dash-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:9px}
+.dstat{background:rgba(255,255,255,.13);border-radius:13px;padding:11px 7px;text-align:center}
+.dstat-v{font-size:21px;font-weight:900}
+.dstat-l{font-size:10.5px;opacity:.7;margin-top:2px}
+
+.prog-sec{padding:16px 18px}
+.prog-lbl{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:5px;display:flex;justify-content:space-between}
+.prog-lbl span{font-weight:900}
+.prog-bar{height:10px;background:#EEF0F5;border-radius:5px;margin-bottom:12px;overflow:hidden}
+.prog-fill{height:100%;border-radius:5px;transition:width 1.2s ease}
+
+.card-block{margin:0 18px 14px;background:var(--white);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.card-block h3{font-size:14px;font-weight:800;color:var(--text);margin-bottom:13px}
+.ready-row{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.ready-sch{font-size:12.5px;font-weight:700;color:var(--text);width:110px;flex-shrink:0}
+.ready-bar{flex:1;height:8px;background:#EEF0F5;border-radius:4px;overflow:hidden}
+.ready-fill{height:100%;border-radius:4px}
+.ready-num{font-size:12.5px;font-weight:800;width:32px;text-align:right}
+
+.streak-dots{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.sd{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:9.5px;font-weight:700;color:var(--muted);background:#F5F7FA}
+.sd.done{background:var(--green);color:#fff}
+.sd.today{background:var(--blue);color:#fff;box-shadow:0 0 0 3px rgba(51,154,240,.28)}
+
+.cta-btn{display:block;margin:6px 18px 14px;width:calc(100% - 36px);background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:18px;padding:17px;font-size:15.5px;font-weight:900;cursor:pointer;box-shadow:0 6px 22px rgba(102,126,234,.38);transition:transform .15s;text-align:center}
+.cta-btn:active{transform:scale(.97)}
+
+.tip-box{background:#FFF8E1;border-radius:12px;padding:11px 13px;font-size:12px;color:#856404;line-height:1.5;margin-top:10px}
+
+/* spacer for scrolling past bottom nav */
+.spacer{height:72px;flex-shrink:0}
+</style>
+</head>
+<body>
+<div id="app">
+
+<!-- ============ HOME ============ -->
+<div class="screen active" id="screen-home">
+  <div class="hero">
+    <div class="hero-greet">☀️ Chào buổi sáng!</div>
+    <div class="hero-name">Bé Minh Anh 👧</div>
+    <div class="stars-pill">
+      <span>⭐</span>
+      <span class="stars-val" id="star-home">0</span>
+      <span style="font-size:12px;opacity:.8">ngôi sao</span>
+    </div>
+    <div class="mascot">🦊</div>
+  </div>
+
+  <div class="sec-title">📚 Môn học hôm nay</div>
+  <div class="subj-grid">
+    <button class="subj-card sc-math" onclick="startLesson('math')">
+      <span class="si">🔢</span>
+      <div class="sn">Toán học</div>
+      <div class="sl">Đếm & Cộng trừ</div>
+      <div class="spb"><div class="spf" style="width:35%"></div></div>
+    </button>
+    <button class="subj-card sc-en" onclick="startLesson('english')">
+      <span class="si">🌍</span>
+      <div class="sn">Tiếng Anh</div>
+      <div class="sl">Màu sắc & Con vật</div>
+      <div class="spb"><div class="spf" style="width:20%"></div></div>
+    </button>
+    <button class="subj-card sc-vn" onclick="startLesson('vietnamese')">
+      <span class="si">🇻🇳</span>
+      <div class="sn">Tiếng Việt</div>
+      <div class="sl">Chữ cái & Câu chuyện</div>
+      <div class="spb"><div class="spf" style="width:50%"></div></div>
+    </button>
+    <button class="subj-card sc-lg" onclick="startLesson('logic')">
+      <span class="si">🧩</span>
+      <div class="sn">Tư duy</div>
+      <div class="sl">Tìm quy luật</div>
+      <div class="spb"><div class="spf" style="width:45%"></div></div>
+    </button>
+  </div>
+
+  <div class="sec-title">🎯 Nhiệm vụ hôm nay</div>
+  <div class="miss-list">
+    <div class="miss-item" onclick="startLesson('math')">
+      <div class="miss-ico" style="background:#FFF0F0">🔢</div>
+      <div class="miss-inf"><div class="miss-t">Đếm số từ 1 đến 5</div><div class="miss-d">5 bài • 10 phút</div></div>
+      <div class="miss-star">+15 ⭐</div>
+    </div>
+    <div class="miss-item" onclick="startLesson('logic')">
+      <div class="miss-ico" style="background:#F3F0FF">🧩</div>
+      <div class="miss-inf"><div class="miss-t">Tìm quy luật hình</div><div class="miss-d">4 bài • 8 phút</div></div>
+      <div class="miss-star">+10 ⭐</div>
+    </div>
+    <div class="miss-item" onclick="startLesson('english')">
+      <div class="miss-ico" style="background:#F0FFF4">🌍</div>
+      <div class="miss-inf"><div class="miss-t">Học màu sắc tiếng Anh</div><div class="miss-d">4 bài • 8 phút</div></div>
+      <div class="miss-star">+10 ⭐</div>
+    </div>
+  </div>
+  <div class="spacer"></div>
+  <nav class="bnav">
+    <button class="bnav-btn on" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
+    <button class="bnav-btn" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
+  </nav>
+</div>
+
+<!-- ============ MATH ============ -->
+<div class="screen" id="screen-math">
+  <div class="les-hdr">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <div class="lpbar"><div class="lpfill" id="math-pbar" style="width:0%"></div></div>
+    <div class="lp-txt" id="math-ptxt">0/5</div>
+  </div>
+  <div class="ex-wrap" id="math-ex"></div>
+</div>
+
+<!-- ============ ENGLISH ============ -->
+<div class="screen" id="screen-english">
+  <div class="les-hdr">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <div class="lpbar"><div class="lpfill" id="english-pbar" style="width:0%"></div></div>
+    <div class="lp-txt" id="english-ptxt">0/4</div>
+  </div>
+  <div class="ex-wrap" id="english-ex"></div>
+</div>
+
+<!-- ============ VIETNAMESE ============ -->
+<div class="screen" id="screen-vietnamese">
+  <div class="les-hdr">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <div class="lpbar"><div class="lpfill" id="vietnamese-pbar" style="width:0%"></div></div>
+    <div class="lp-txt" id="vietnamese-ptxt">0/4</div>
+  </div>
+  <div class="ex-wrap" id="vietnamese-ex"></div>
+</div>
+
+<!-- ============ LOGIC ============ -->
+<div class="screen" id="screen-logic">
+  <div class="les-hdr">
+    <button class="btn-back" onclick="goHome()">←</button>
+    <div class="lpbar"><div class="lpfill" id="logic-pbar" style="width:0%"></div></div>
+    <div class="lp-txt" id="logic-ptxt">0/4</div>
+  </div>
+  <div class="ex-wrap" id="logic-ex"></div>
+</div>
+
+<!-- ============ COMPLETION ============ -->
+<div class="screen" id="screen-completion">
+  <div class="comp-emoji" id="comp-emo">🎊</div>
+  <div class="comp-title" id="comp-title">Tuyệt vời!</div>
+  <div class="comp-sub" id="comp-sub">Bé đã hoàn thành bài học!</div>
+  <div class="comp-stars"><div class="comp-s">⭐</div><div class="comp-s">⭐</div><div class="comp-s">⭐</div></div>
+  <div class="comp-earned" id="comp-earned">+35 ⭐ hôm nay!</div>
+  <button class="comp-btn" onclick="goHome()">🏠 Về trang chủ</button>
+</div>
+
+<!-- ============ ROADMAP ============ -->
+<div class="screen" id="screen-roadmap">
+  <div class="road-hero">
+    <h2>🗺️ Lộ trình học tập</h2>
+    <p>Từ 3,5 tuổi đến thi vào lớp 1 trọng điểm Hà Nội</p>
+  </div>
+  <div class="road-body">
+
+    <div class="stage-card">
+      <div class="stage-hdr">
+        <div class="stage-num" style="background:#FF6B6B">1</div>
+        <div class="stage-inf">
+          <div class="stage-name">Nền tảng nhận thức</div>
+          <div class="stage-age">3,5 – 4,5 tuổi &nbsp;•&nbsp; 10 phút/ngày</div>
+        </div>
+        <div class="stage-badge" style="background:#FFF0F0;color:#FF6B6B">🔥 Đang học</div>
+      </div>
+      <div class="stage-body">
+        <div class="skill-tags">
+          <span class="skill-tag">🔢 Đếm 1–10</span><span class="skill-tag">⭕ 4 hình cơ bản</span>
+          <span class="skill-tag">🎨 Màu sắc</span><span class="skill-tag">🔤 A–Z nhận dạng</span>
+          <span class="skill-tag">🌍 Hello/Bye</span><span class="skill-tag">🧩 Phân loại 1 thuộc tính</span>
+        </div>
+        <div class="stl"><div class="stlf" style="width:35%;background:#FF6B6B"></div></div>
+      </div>
+    </div>
+
+    <div class="stage-card">
+      <div class="stage-hdr">
+        <div class="stage-num" style="background:#4ECDC4">2</div>
+        <div class="stage-inf">
+          <div class="stage-name">Phát triển tư duy</div>
+          <div class="stage-age">4,5 – 5,5 tuổi &nbsp;•&nbsp; 15 phút/ngày</div>
+        </div>
+        <div class="stage-badge" style="background:#E0F7F5;color:#4ECDC4">⏳ Sắp tới</div>
+      </div>
+      <div class="stage-body">
+        <div class="skill-tags">
+          <span class="skill-tag">➕ Cộng/trừ trong 5</span><span class="skill-tag">📖 Bảng chữ cái đọc</span>
+          <span class="skill-tag">🔁 Tìm quy luật</span><span class="skill-tag">🌍 100+ từ vựng EN</span>
+          <span class="skill-tag">📸 Kể chuyện 3 tranh</span><span class="skill-tag">🤔 Ma trận 2×2</span>
+        </div>
+        <div class="stl"><div class="stlf" style="width:0%;background:#4ECDC4"></div></div>
+      </div>
+    </div>
+
+    <div class="stage-card">
+      <div class="stage-hdr">
+        <div class="stage-num" style="background:#FFE66D;color:#333">3</div>
+        <div class="stage-inf">
+          <div class="stage-name">Nâng cao & Tích hợp</div>
+          <div class="stage-age">5,5 – 6 tuổi &nbsp;•&nbsp; 20 phút/ngày</div>
+        </div>
+        <div class="stage-badge" style="background:#FFF8E1;color:#C9920A">🔒 Chưa mở</div>
+      </div>
+      <div class="stage-body">
+        <div class="skill-tags">
+          <span class="skill-tag">➕ Cộng/trừ trong 10</span><span class="skill-tag">🔤 Ghép vần cơ bản</span>
+          <span class="skill-tag">🧮 Ma trận 3×3</span><span class="skill-tag">💬 Hội thoại EN</span>
+          <span class="skill-tag">📝 Bài toán có lời</span><span class="skill-tag">🔍 Hình học 3D</span>
+        </div>
+        <div class="stl"><div class="stlf" style="width:0%;background:#FFE66D"></div></div>
+      </div>
+    </div>
+
+    <div class="stage-card">
+      <div class="stage-hdr">
+        <div class="stage-num" style="background:#845EC2">4</div>
+        <div class="stage-inf">
+          <div class="stage-name">Ôn luyện thi đầu vào</div>
+          <div class="stage-age">6 tuổi &nbsp;•&nbsp; 3 tháng trước thi</div>
+        </div>
+        <div class="stage-badge" style="background:#EFE5FF;color:#845EC2">🔒 Chưa mở</div>
+      </div>
+      <div class="stage-body">
+        <div class="skill-tags">
+          <span class="skill-tag">📋 Mock Nguyễn Siêu</span><span class="skill-tag">📋 Mock Đoàn Thị Điểm</span>
+          <span class="skill-tag">📋 Mock Ngôi Sao CG</span><span class="skill-tag">🎤 Phỏng vấn EN</span>
+          <span class="skill-tag">💪 Tự tin & Tự lập</span>
+        </div>
+        <div class="stl"><div class="stlf" style="width:0%;background:#845EC2"></div></div>
+      </div>
+    </div>
+
+    <div class="sec-title" style="padding-left:0;padding-top:8px">🏫 Trường mục tiêu</div>
+    <div class="schools-row">
+      <div class="sch-card">
+        <div class="sch-ico">🎓</div>
+        <div class="sch-name">Nguyễn Siêu</div>
+        <div class="sch-pct" style="color:#339AF0">35%</div>
+      </div>
+      <div class="sch-card">
+        <div class="sch-ico">⭐</div>
+        <div class="sch-name">Ngôi Sao Cầu Giấy</div>
+        <div class="sch-pct" style="color:#51CF66">40%</div>
+      </div>
+      <div class="sch-card">
+        <div class="sch-ico">🌸</div>
+        <div class="sch-name">Đoàn Thị Điểm</div>
+        <div class="sch-pct" style="color:#FF6B6B">38%</div>
+      </div>
+    </div>
+
+    <div class="tip-box">💡 <b>Bé đang ở Giai đoạn 1.</b> Cần hoàn thành ~2,4 năm học nữa để sẵn sàng thi. Học đều đặn 10 phút/ngày là đủ!</div>
+  </div>
+  <nav class="bnav">
+    <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
+    <button class="bnav-btn on" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
+  </nav>
+</div>
+
+<!-- ============ PARENT ============ -->
+<div class="screen" id="screen-parent">
+  <div class="dash-hero">
+    <h2>👨‍👩‍👧 Bảng theo dõi</h2>
+    <div class="dash-sub">Bé Minh Anh &nbsp;•&nbsp; 3 tuổi 6 tháng</div>
+    <div class="dash-stats">
+      <div class="dstat"><div class="dstat-v" id="star-parent">0</div><div class="dstat-l">Ngôi sao</div></div>
+      <div class="dstat"><div class="dstat-v">3</div><div class="dstat-l">Ngày streak</div></div>
+      <div class="dstat"><div class="dstat-v">12</div><div class="dstat-l">Bài xong</div></div>
+    </div>
+  </div>
+
+  <div class="prog-sec">
+    <div style="font-size:15px;font-weight:800;color:var(--text);margin-bottom:13px">📊 Tiến độ từng môn</div>
+    <div class="prog-lbl">🔢 Toán học <span style="color:#FF6B6B">35%</span></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:35%;background:#FF6B6B"></div></div>
+    <div class="prog-lbl">🌍 Tiếng Anh <span style="color:#51CF66">20%</span></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:20%;background:#51CF66"></div></div>
+    <div class="prog-lbl">🇻🇳 Tiếng Việt <span style="color:#DEAD00">50%</span></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:50%;background:#DEAD00"></div></div>
+    <div class="prog-lbl">🧩 Tư duy Logic <span style="color:#845EC2">45%</span></div>
+    <div class="prog-bar"><div class="prog-fill" style="width:45%;background:#845EC2"></div></div>
+  </div>
+
+  <div class="card-block">
+    <h3>🏫 Mức độ sẵn sàng theo trường</h3>
+    <div class="ready-row">
+      <span class="ready-sch">🎓 Nguyễn Siêu</span>
+      <div class="ready-bar"><div class="ready-fill" style="width:35%;background:#339AF0"></div></div>
+      <span class="ready-num" style="color:#339AF0">35%</span>
+    </div>
+    <div class="ready-row">
+      <span class="ready-sch">⭐ Ngôi Sao CG</span>
+      <div class="ready-bar"><div class="ready-fill" style="width:40%;background:#51CF66"></div></div>
+      <span class="ready-num" style="color:#51CF66">40%</span>
+    </div>
+    <div class="ready-row">
+      <span class="ready-sch">🌸 Đoàn Thị Điểm</span>
+      <div class="ready-bar"><div class="ready-fill" style="width:38%;background:#FF6B6B"></div></div>
+      <span class="ready-num" style="color:#FF6B6B">38%</span>
+    </div>
+    <div class="tip-box">💡 <b>Ưu tiên:</b> Tập trung Tiếng Anh để cải thiện cơ hội đỗ Nguyễn Siêu — trường này đặt nặng tiếng Anh nhất. Luyện speaking 5 phút mỗi ngày.</div>
+  </div>
+
+  <div class="card-block">
+    <h3>🔥 Lịch học tháng 6/2026</h3>
+    <div class="streak-dots" id="streak-cal"></div>
+  </div>
+
+  <button class="cta-btn" onclick="showPDFAlert()">📄 Xuất báo cáo PDF</button>
+  <div class="spacer"></div>
+  <nav class="bnav">
+    <button class="bnav-btn" onclick="nav('home')"><span class="ni">🏠</span>Trang chủ</button>
+    <button class="bnav-btn" onclick="nav('roadmap')"><span class="ni">🗺️</span>Lộ trình</button>
+    <button class="bnav-btn on" onclick="nav('parent')"><span class="ni">👨‍👩‍👧</span>Phụ huynh</button>
+  </nav>
+</div>
+
+<!-- ============ FEEDBACK OVERLAY ============ -->
+<div id="fb-ov">
+  <div id="fb-emoji">🎉</div>
+  <div id="fb-text">Đúng rồi!</div>
+  <div id="fb-sub">+5 ⭐</div>
+</div>
+
+</div><!-- #app -->
+
+<script>
+// ─────────────────────────────────────────────
+//  STATE
+// ─────────────────────────────────────────────
+let stars = 0;
+let activeLessonId = null;
+let exIdx = 0;
+let answered = false;
+let currentScreenId = 'home';
+
+// ─────────────────────────────────────────────
+//  EXERCISE DATA
+// ─────────────────────────────────────────────
+const DB = {
+  math: [
+    { type:'count', q:'Có mấy quả táo? 🤔', items:['🍎','🍎','🍎'],            ans:'3', opts:['2','3','4'],    s:5 },
+    { type:'count', q:'Đếm xem có mấy con thỏ?',  items:['🐰','🐰','🐰','🐰','🐰'], ans:'5', opts:['4','5','6'],    s:5 },
+    { type:'count', q:'Có bao nhiêu ngôi sao?',   items:['⭐','⭐'],               ans:'2', opts:['1','2','3'],    s:5 },
+    { type:'add',   q:'2 + 3 = mấy? 🧮', left:['🍓','🍓'], right:['🍓','🍓','🍓'], ans:'5', opts:['4','5','6'],    s:10 },
+    { type:'cmp',   q:'Nhóm nào NHIỀU hơn?', ga:['🦆','🦆','🦆'], gb:['🦆','🦆','🦆','🦆'], ans:'B', opts:['Nhóm A','Nhóm B','Bằng nhau'], s:5 },
+  ],
+  english: [
+    { type:'color',  q:'What color is this? 🎨', color:'#FF0000', ans:'Red',  opts:['Red','Blue','Green','Yellow'],    s:5 },
+    { type:'color',  q:'What color is this?',    color:'#339AF0', ans:'Blue', opts:['Purple','Blue','Green','Orange'],  s:5 },
+    { type:'animal', q:'What animal is this? 🐾', img:'🐱', ans:'Cat', opts:['Dog','Cat','Bird','Fish'],  s:5 },
+    { type:'animal', q:'What animal is this?',    img:'🐶', ans:'Dog', opts:['Cat','Rabbit','Dog','Tiger'], s:5 },
+  ],
+  vietnamese: [
+    { type:'letter', q:'Chữ nào là chữ "A"?',  ans:'A', opts:['A','B','C','D'], s:5 },
+    { type:'letter', q:'Chữ nào là chữ "M"?',  ans:'M', opts:['N','M','H','K'], s:5 },
+    { type:'pick',   q:'Từ nào bắt đầu bằng chữ "H"?', ans:'Hoa', opts:['🐶 Chó','🌸 Hoa','🍎 Táo','🌙 Trăng'], s:10 },
+    { type:'pick',   q:'Bức tranh này kể về điều gì?', img:'🌤️', ans:'Trời nắng đẹp', opts:['Trời mưa','Trời nắng đẹp','Trời tối','Trời tuyết'], s:10 },
+  ],
+  logic: [
+    { type:'pattern', q:'Hình tiếp theo là gì? 🔍', seq:['🔴','🔵','🔴','🔵','🔴'], ans:'🔵', opts:['🔵','🔴','🟢'], s:10 },
+    { type:'pattern', q:'Điền vào dấu ❓',           seq:['🌟','🌙','🌟','🌙','🌟'],    ans:'🌙', opts:['⭐','🌙','☀️'], s:10 },
+    { type:'pick',    q:'Thứ nào KHÁC với các thứ còn lại? 🤔', hint:'Một thứ không phải trái cây', ans:'🚗 Xe hơi', opts:['🍎 Táo','🍊 Cam','🚗 Xe hơi','🍇 Nho'], s:10 },
+    { type:'numseq',  q:'Số tiếp theo là mấy?',       seq:['1️⃣','2️⃣','3️⃣','4️⃣'],        ans:'5️⃣', opts:['3️⃣','5️⃣','6️⃣'], s:10 },
+  ],
+};
+
+const SUBJ_NAMES = { math:'Toán học', english:'Tiếng Anh', vietnamese:'Tiếng Việt', logic:'Tư duy Logic' };
+
+// ─────────────────────────────────────────────
+//  AUDIO
+// ─────────────────────────────────────────────
+let actx;
+function getACtx(){ return actx || (actx = new (window.AudioContext||window.webkitAudioContext)()); }
+function beep(freq, dur, type='sine', vol=0.28){
+  try{
+    const c=getACtx(), o=c.createOscillator(), g=c.createGain();
+    o.connect(g); g.connect(c.destination);
+    o.frequency.value=freq; o.type=type;
+    g.gain.setValueAtTime(vol,c.currentTime);
+    g.gain.exponentialRampToValueAtTime(0.001,c.currentTime+dur);
+    o.start(c.currentTime); o.stop(c.currentTime+dur);
+  }catch(e){}
+}
+function sndOK(){  beep(523,.11);setTimeout(()=>beep(659,.11),110);setTimeout(()=>beep(784,.22),220); }
+function sndWrong(){ beep(200,.28,'sawtooth',.14); }
+function sndStar(){ [880,988,1047,1175].forEach((f,i)=>setTimeout(()=>beep(f,.14,'sine',.18),i*75)); }
+function sndTap(){  beep(440,.07,'sine',.12); }
+
+// ─────────────────────────────────────────────
+//  SCREEN NAV
+// ─────────────────────────────────────────────
+const navOrder = ['home','roadmap','parent'];
+
+function nav(id){
+  const prev = navOrder.indexOf(currentScreenId);
+  const next = navOrder.indexOf(id);
+  _transition(id, next >= prev ? 'right' : 'left');
+}
+
+function goHome(){ _transition('home', 'left'); }
+
+function _transition(id, dir){
+  const from = document.getElementById('screen-'+currentScreenId);
+  const to   = document.getElementById('screen-'+id);
+  if(!to || from===to) return;
+
+  // Position 'to' screen off-screen in the right direction
+  to.style.transition='none';
+  to.style.transform = dir==='right' ? 'translateX(100%)' : 'translateX(-100%)';
+  to.style.opacity='0';
+  to.classList.remove('active','exit');
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    to.style.transition='';
+    to.style.transform=''; to.style.opacity='';
+    to.classList.add('active');
+
+    from.style.transform = dir==='right' ? 'translateX(-30%)' : 'translateX(30%)';
+    from.style.opacity='0';
+    from.addEventListener('transitionend', ()=>{
+      from.classList.remove('active');
+      from.style.transform=''; from.style.opacity='';
+    }, {once:true});
+  }));
+
+  currentScreenId = id;
+  // Update bottom nav highlights
+  document.querySelectorAll('.bnav-btn').forEach(b=>{
+    b.classList.remove('on');
+    if(b.getAttribute('onclick')===`nav('${id}')`) b.classList.add('on');
+  });
+}
+
+function startLesson(id){
+  activeLessonId = id; exIdx = 0; answered = false;
+  _transition(id, 'right');
+  renderEx(id, 0);
+}
+
+// ─────────────────────────────────────────────
+//  EXERCISE RENDER
+// ─────────────────────────────────────────────
+function renderEx(subj, idx){
+  const list = DB[subj];
+  const wrap = document.getElementById(subj+'-ex');
+  const pbar = document.getElementById(subj+'-pbar');
+  const ptxt = document.getElementById(subj+'-ptxt');
+
+  if(idx >= list.length){ finishLesson(subj); return; }
+
+  const pct = (idx/list.length)*100;
+  if(pbar) pbar.style.width = pct+'%';
+  if(ptxt) ptxt.textContent = idx+'/'+list.length;
+
+  answered = false;
+  const ex = list[idx];
+  wrap.innerHTML = buildExHTML(ex, subj, idx);
+
+  // Stagger animation on count items
+  wrap.querySelectorAll('.cnt-item').forEach((el,i)=>el.style.animationDelay=(i*.09)+'s');
+}
+
+function buildExHTML(ex, subj, idx){
+  let h = `<div class="ex-q">${ex.q}</div>`;
+
+  if(ex.hint) h+=`<div style="background:#FFF8E1;border-radius:12px;padding:9px 13px;font-size:12px;color:#856404;width:100%">💡 ${ex.hint}</div>`;
+
+  if(ex.type==='count'){
+    h+=`<div class="cnt-box">`;
+    ex.items.forEach((it,i)=>h+=`<span class="cnt-item" style="animation-delay:${i*.09}s" onclick="tapItem(this)">${it}</span>`);
+    h+=`</div>`;
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c3');
+  }
+  else if(ex.type==='add'){
+    h+=`<div class="add-row">`;
+    ex.left.forEach(it=>h+=`<span class="cnt-item">${it}</span>`);
+    h+=`<span class="add-op">+</span>`;
+    ex.right.forEach(it=>h+=`<span class="cnt-item">${it}</span>`);
+    h+=`<span class="add-op">=</span><span style="font-size:34px;font-weight:900;color:#FF6B6B">?</span>`;
+    h+=`</div>`;
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c3');
+  }
+  else if(ex.type==='cmp'){
+    h+=`<div class="cmp-row">`;
+    h+=`<div class="cmp-grp"><div class="cmp-lbl">Nhóm A</div>${ex.ga.map(i=>`<span style="font-size:26px">${i}</span>`).join('')}</div>`;
+    h+=`<div class="cmp-grp"><div class="cmp-lbl">Nhóm B</div>${ex.gb.map(i=>`<span style="font-size:26px">${i}</span>`).join('')}</div>`;
+    h+=`</div>`;
+    h+=opts(ex.opts, ex.ans==='B'?'Nhóm B':ex.ans, subj, idx, 'c3', 'font-size:12.5px;padding:12px 6px');
+  }
+  else if(ex.type==='color'){
+    h+=`<div class="color-swatch" style="background:${ex.color}"></div>`;
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2');
+  }
+  else if(ex.type==='animal'){
+    h+=`<div class="vocab-card"><span class="vocab-img">${ex.img}</span><div class="vocab-q">This is a ___?</div></div>`;
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2');
+  }
+  else if(ex.type==='letter'){
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:36px;font-weight:900;padding:20px');
+  }
+  else if(ex.type==='pick'){
+    if(ex.img) h+=`<div class="vocab-card"><span class="vocab-img">${ex.img}</span></div>`;
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:13.5px;padding:14px 10px');
+  }
+  else if(ex.type==='pattern'||ex.type==='numseq'){
+    h+=`<div class="pat-box">`;
+    ex.seq.forEach(it=>h+=`<span class="pat-item">${it}</span>`);
+    h+=`<div class="pat-miss">❓</div></div>`;
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c3', 'font-size:30px;padding:16px');
+  }
+  return h;
+}
+
+function opts(list, ans, subj, idx, gridCls, extraStyle=''){
+  let h = `<div class="opts ${gridCls}">`;
+  list.forEach(o=>{
+    const v = String(o).replace(/"/g,'&quot;');
+    h+=`<button class="opt-btn" data-val="${v}" style="${extraStyle}" onclick="answer(this,'${subj}',${idx})">${o}</button>`;
+  });
+  h+=`</div>`;
+  return h;
+}
+
+function tapItem(el){ el.classList.toggle('lit'); sndTap(); }
+
+function answer(btn, subj, idx){
+  if(answered) return;
+  answered = true;
+  const val = btn.dataset.val;
+  const ex  = DB[subj][idx];
+  const ok  = val.trim() === String(ex.ans).trim();
+
+  if(ok){
+    btn.classList.add('ok');
+    sndOK();
+    addStars(ex.s||5);
+    showFB(true, ex.s||5);
+    setTimeout(()=>{ hideFB(); exIdx=idx+1; renderEx(subj,exIdx); }, 1200);
+  } else {
+    btn.classList.add('no');
+    sndWrong();
+    showFB(false, 0);
+    setTimeout(()=>{ hideFB(); answered=false; btn.classList.remove('no'); }, 950);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  FEEDBACK
+// ─────────────────────────────────────────────
+const FB_MSGS = ['Đúng rồi! 🎉','Tuyệt vời! 🌟','Giỏi quá! 💪','Xuất sắc! 🏆','Bé thông minh! 🧠'];
+
+function showFB(ok, s){
+  const ov=document.getElementById('fb-ov');
+  document.getElementById('fb-emoji').textContent = ok ? '🎉' : '🤔';
+  document.getElementById('fb-text').textContent  = ok ? FB_MSGS[Math.floor(Math.random()*FB_MSGS.length)] : 'Thử lại nhé bé!';
+  document.getElementById('fb-sub').textContent   = ok ? `+${s} ⭐` : 'Bé làm được mà! 💪';
+  ov.classList.add('show');
+  if(ok){ spawnStars(); sndStar(); }
+}
+function hideFB(){ document.getElementById('fb-ov').classList.remove('show'); }
+
+function spawnStars(){
+  const app=document.getElementById('app'), r=app.getBoundingClientRect();
+  for(let i=0;i<10;i++){
+    const el=document.createElement('div');
+    el.className='star-p';
+    el.textContent=['⭐','🌟','✨'][Math.floor(Math.random()*3)];
+    el.style.left=(Math.random()*380)+'px';
+    el.style.top=(30+Math.random()*120)+'px';
+    el.style.animationDelay=(Math.random()*.5)+'s';
+    app.appendChild(el);
+    setTimeout(()=>el.remove(),2200);
+  }
+}
+
+// ─────────────────────────────────────────────
+//  STARS
+// ─────────────────────────────────────────────
+function addStars(n){
+  stars+=n;
+  document.getElementById('star-home').textContent=stars;
+  document.getElementById('star-parent').textContent=stars;
+}
+
+// ─────────────────────────────────────────────
+//  COMPLETION
+// ─────────────────────────────────────────────
+function finishLesson(subj){
+  const total = DB[subj].reduce((a,e)=>a+(e.s||5),0);
+  const pb=document.getElementById(subj+'-pbar'), pt=document.getElementById(subj+'-ptxt');
+  if(pb) pb.style.width='100%';
+  if(pt) pt.textContent=DB[subj].length+'/'+DB[subj].length;
+  document.getElementById('comp-title').textContent='Hoàn thành! 🎊';
+  document.getElementById('comp-sub').textContent=`Bé đã xong bài ${SUBJ_NAMES[subj]}!`;
+  document.getElementById('comp-earned').textContent=`+${total} ⭐ hôm nay!`;
+  sndStar(); spawnStars();
+  _transition('completion','right');
+}
+
+// ─────────────────────────────────────────────
+//  STREAK CALENDAR
+// ─────────────────────────────────────────────
+function buildCal(){
+  const el=document.getElementById('streak-cal'); if(!el) return;
+  const today=9, doneDays=[1,2,3,5,6,7,8,9];
+  let h='';
+  for(let d=1;d<=30;d++){
+    let cls='sd';
+    if(d===today) cls+=' today';
+    else if(doneDays.includes(d)) cls+=' done';
+    h+=`<div class="${cls}">${d}</div>`;
+  }
+  el.innerHTML=h;
+}
+
+// ─────────────────────────────────────────────
+//  PDF ALERT
+// ─────────────────────────────────────────────
+function showPDFAlert(){
+  alert('📄 Báo cáo đang được tạo...\n\n✅ Tiến độ 4 môn học\n✅ Mức độ sẵn sàng theo trường\n✅ Gợi ý bài tập tuần tới\n✅ So sánh với milestone lứa tuổi\n\n→ Demo: file PDF sẽ xuất ở đây!');
+}
+
+// ─────────────────────────────────────────────
+//  INIT
+// ─────────────────────────────────────────────
+window.addEventListener('load',()=>{
+  buildCal();
+  // Make sure home is visible, all others hidden
+  document.querySelectorAll('.screen').forEach(s=>{
+    if(s.id!=='screen-home'){
+      s.classList.remove('active');
+      s.style.transform='translateX(100%)';
+      s.style.opacity='0';
+    }
+  });
+});
+
+// Prevent double-tap zoom on iOS
+document.addEventListener('touchend', e=>{
+  if(e.target.tagName==='BUTTON') e.preventDefault();
+}, {passive:false});
+</script>
+</body>
+</html>
