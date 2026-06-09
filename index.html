@@ -105,13 +105,13 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
 @keyframes pulse-tts{0%,100%{box-shadow:0 0 0 0 rgba(51,154,240,.4)}50%{box-shadow:0 0 0 8px rgba(51,154,240,0)}}
 
 /* ===== EXERCISE AREA ===== */
-.ex-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:22px 18px 28px;gap:16px;min-height:0}
-.ex-q{text-align:center;font-size:19px;font-weight:800;color:var(--text);line-height:1.45}
-.ex-hint{font-size:12.5px;color:var(--muted);text-align:center}
+.ex-wrap{flex:1;display:flex;flex-direction:column;align-items:center;padding:20px 16px 24px;gap:14px;min-height:0}
+.ex-q{text-align:center;font-size:23px;font-weight:900;color:var(--text);line-height:1.45;padding:0 4px}
+.ex-hint{font-size:13px;color:var(--muted);text-align:center}
 
 /* count box */
-.cnt-box{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%;min-height:90px;align-content:center}
-.cnt-item{font-size:38px;cursor:pointer;transition:transform .12s;animation:popin .3s ease backwards}
+.cnt-box{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%;min-height:100px;align-content:center}
+.cnt-item{font-size:46px;cursor:pointer;transition:transform .12s;animation:popin .3s ease backwards}
 .cnt-item:active,.cnt-item.lit{transform:scale(1.35);filter:drop-shadow(0 0 10px rgba(81,207,102,.9))}
 @keyframes popin{from{transform:scale(0) rotate(-15deg);opacity:0}to{transform:scale(1) rotate(0);opacity:1}}
 
@@ -125,24 +125,25 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
 .cmp-lbl{font-weight:800;font-size:12px;color:var(--muted);margin-bottom:6px}
 
 /* color swatch */
-.color-swatch{width:130px;height:130px;border-radius:30px;box-shadow:var(--shadow);animation:popin .4s ease}
+.color-swatch{width:160px;height:160px;border-radius:30px;box-shadow:var(--shadow);animation:popin .4s ease}
 
 /* vocab card */
-.vocab-card{width:100%;background:var(--white);border-radius:24px;box-shadow:var(--shadow);padding:22px;text-align:center}
-.vocab-img{font-size:76px;display:block;margin-bottom:10px}
-.vocab-q{font-size:15px;font-weight:700;color:var(--text)}
+.vocab-card{width:100%;background:var(--white);border-radius:24px;box-shadow:var(--shadow);padding:20px;text-align:center}
+.vocab-img{font-size:96px;display:block;margin-bottom:10px;line-height:1.1}
+.vocab-q{font-size:16px;font-weight:700;color:var(--text)}
 
 /* pattern */
-.pat-box{display:flex;align-items:center;gap:8px;flex-wrap:wrap;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%}
-.pat-item{font-size:34px}
-.pat-miss{width:52px;height:52px;border:3px dashed var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:22px;animation:pulse-bdr 1.5s ease-in-out infinite}
+.pat-box{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;padding:18px;background:var(--white);border-radius:24px;box-shadow:var(--shadow);width:100%}
+.pat-item{font-size:42px}
+.pat-miss{width:58px;height:58px;border:3px dashed var(--blue);border-radius:12px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:24px;animation:pulse-bdr 1.5s ease-in-out infinite}
 @keyframes pulse-bdr{0%,100%{border-color:var(--blue)}50%{border-color:var(--purple)}}
 
 /* options — BIGGER TOUCH TARGETS */
 .opts{display:grid;gap:11px;width:100%}
 .opts.c3{grid-template-columns:repeat(3,1fr)}
 .opts.c2{grid-template-columns:repeat(2,1fr)}
-.opt-btn{border:3px solid var(--border);border-radius:18px;padding:18px 10px;font-size:19px;font-weight:800;cursor:pointer;background:var(--white);box-shadow:0 5px 16px rgba(0,0,0,.09);color:var(--text);transition:transform .12s,box-shadow .12s,border-color .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-height:72px;width:100%;line-height:1.2}
+.opt-btn{border:3px solid var(--border);border-radius:18px;padding:18px 10px;font-size:20px;font-weight:800;cursor:pointer;background:var(--white);box-shadow:0 5px 16px rgba(0,0,0,.09);color:var(--text);transition:transform .12s,box-shadow .12s,border-color .15s;display:flex;align-items:center;justify-content:center;gap:6px;min-height:76px;width:100%;line-height:1.25}
+.opts.c2 .opt-btn{font-size:22px;min-height:86px}
 .opt-btn:hover{border-color:#C0CADF;transform:translateY(-2px);box-shadow:0 8px 22px rgba(0,0,0,.12)}
 .opt-btn:active{transform:scale(.91)!important;box-shadow:0 2px 8px rgba(0,0,0,.08)}
 .opt-btn.ok{background:linear-gradient(135deg,#51CF66,#40C057);border-color:#40C057;color:#fff;animation:ok-bounce .45s ease}
@@ -439,7 +440,7 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
   <div class="comp-earned" id="comp-earned">+35 ⭐ hôm nay!</div>
   <div class="comp-btns">
     <button class="comp-btn" onclick="goHome()">🏠 Về trang chủ</button>
-    <button class="comp-btn ws" onclick="openWorksheet()">📄 In phiếu bài tập</button>
+    <button class="comp-btn ws" id="comp-ws-btn" onclick="openWorksheetForSubj()">📄 In phiếu bài tập</button>
   </div>
 </div>
 
@@ -717,8 +718,8 @@ const SUBJ_NAMES = { math:'Toán học', english:'Tiếng Anh', vietnamese:'Ti�
 //  TTS — Web Speech API
 // ─────────────────────────────────────────────
 const voices = { en:null, vi:null };
-let currentTTSText = '';
-let currentTTSLang = 'vi';
+let ttsQueue = [];
+let ttsCurrentEx = null;
 
 function loadVoices(){
   const all = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
@@ -731,27 +732,63 @@ if(window.speechSynthesis){
   loadVoices();
 }
 
-function speak(text, lang='vi'){
-  if(!window.speechSynthesis) return;
-  window.speechSynthesis.cancel();
+function _makeUtter(text, lang){
   const u = new SpeechSynthesisUtterance(text);
   u.lang = lang==='en' ? 'en-US' : 'vi-VN';
   if(lang==='en' && voices.en) u.voice = voices.en;
   if(lang==='vi' && voices.vi) u.voice = voices.vi;
-  u.rate = lang==='en' ? 0.85 : 0.82;
-  u.pitch = 1.1;
+  u.rate = lang==='en' ? 0.68 : 0.82;
+  u.pitch = lang==='en' ? 1.05 : 1.1;
   u.volume = 1;
+  return u;
+}
 
+function _cleanText(s){
+  return String(s)
+    .replace(/[\u{1F300}-\u{1FFFF}\u{2600}-\u{27BF}]/gu, '')
+    .replace(/[🤔🧮🔍❓🎨🐾🌍🇻🇳🔢🧩]/g,'')
+    .replace(/\s+/g,' ').trim();
+}
+
+function _runQueue(){
+  if(!ttsQueue.length || !window.speechSynthesis) return;
+  const { text, lang } = ttsQueue.shift();
+  const u = _makeUtter(text, lang);
   const btn = document.querySelector('.tts-btn');
-  if(btn){ btn.classList.add('speaking'); u.onend = ()=>btn.classList.remove('speaking'); }
-
+  if(btn) btn.classList.add('speaking');
+  u.onend = ()=>{
+    if(!ttsQueue.length && btn) btn.classList.remove('speaking');
+    setTimeout(_runQueue, lang==='en' ? 350 : 200);
+  };
+  u.onerror = ()=>{ ttsQueue=[]; if(btn) btn.classList.remove('speaking'); };
   window.speechSynthesis.speak(u);
-  currentTTSText = text;
-  currentTTSLang = lang;
+}
+
+function speakExercise(ex, lang){
+  if(!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  ttsQueue = [];
+  ttsCurrentEx = ex;
+
+  const q = _cleanText(ex.q);
+  ttsQueue.push({ text: q, lang });
+
+  if(ex.opts){
+    const labels = ['A','B','C','D'];
+    ex.opts.forEach((o,i)=>{
+      const t = _cleanText(o);
+      if(t) ttsQueue.push({ text:`${labels[i]}. ${t}`, lang });
+    });
+  }
+
+  setTimeout(_runQueue, 450);
 }
 
 function reSpeakCurrent(){
-  if(currentTTSText) speak(currentTTSText, currentTTSLang);
+  if(ttsCurrentEx){
+    const lang = ttsCurrentEx.ttsLang || 'vi';
+    speakExercise(ttsCurrentEx, lang);
+  }
 }
 
 // ─────────────────────────────────────────────
@@ -875,10 +912,9 @@ function renderEx(subj, idx){
   wrap.innerHTML = buildExHTML(ex, subj, idx);
   wrap.querySelectorAll('.cnt-item').forEach((el,i)=>el.style.animationDelay=(i*.09)+'s');
 
-  // Auto-speak after short delay
+  // Auto-speak question + options
   const lang = ex.ttsLang || (subj==='english'?'en':'vi');
-  const plainQ = ex.q.replace(/[🤔🧮🔍❓🎨🐾]/g,'').trim();
-  setTimeout(()=>speak(plainQ, lang), 420);
+  speakExercise(ex, lang);
 }
 
 function buildExHTML(ex, subj, idx){
@@ -913,21 +949,21 @@ function buildExHTML(ex, subj, idx){
     h+=opts(ex.opts, ex.ans, subj, idx, 'c2');
   }
   else if(ex.type==='animal'){
-    h+=`<div class="vocab-card"><span class="vocab-img">${ex.img}</span><div class="vocab-q">This is a ___?</div></div>`;
+    h+=`<div class="vocab-card"><span class="vocab-img">${ex.img}</span><div class="vocab-q">What is this? 🎯</div></div>`;
     h+=opts(ex.opts, ex.ans, subj, idx, 'c2');
   }
   else if(ex.type==='letter'){
-    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:36px;font-weight:900;min-height:88px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:40px;font-weight:900;min-height:96px');
   }
   else if(ex.type==='pick'){
     if(ex.img) h+=`<div class="vocab-card"><span class="vocab-img">${ex.img}</span></div>`;
-    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:13.5px;min-height:72px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c2', 'font-size:15px;min-height:80px');
   }
   else if(ex.type==='pattern'||ex.type==='numseq'){
     h+=`<div class="pat-box">`;
     ex.seq.forEach(it=>h+=`<span class="pat-item">${it}</span>`);
     h+=`<div class="pat-miss">❓</div></div>`;
-    h+=opts(ex.opts, ex.ans, subj, idx, 'c3', 'font-size:28px;min-height:72px');
+    h+=opts(ex.opts, ex.ans, subj, idx, 'c3', 'font-size:30px;min-height:76px');
   }
   return h;
 }
@@ -1031,6 +1067,9 @@ function finishLesson(subj){
   document.getElementById('comp-title').textContent = 'Hoàn thành! 🎊';
   document.getElementById('comp-sub').textContent = `Bé đã xong bài ${SUBJ_NAMES[subj]}!`;
   document.getElementById('comp-earned').textContent = `+${total} ⭐ hôm nay!`;
+  const wsBtn = document.getElementById('comp-ws-btn');
+  const wsIcons = {math:'🔢',english:'🌍',vietnamese:'🇻🇳',logic:'🧩'};
+  if(wsBtn){ wsBtn.textContent=`${wsIcons[subj]||'📄'} In phiếu ${SUBJ_NAMES[subj]}`; wsBtn.dataset.subj=subj; }
   sndStar(); spawnStars();
   _transition('completion','right');
   if(window.speechSynthesis) window.speechSynthesis.cancel();
@@ -1211,14 +1250,26 @@ function confirmReset(){
 }
 
 // ─────────────────────────────────────────────
-//  PRINTABLE WORKSHEET
+//  PRINTABLE WORKSHEETS
 // ─────────────────────────────────────────────
-function openWorksheet(){
+function _openWS(html){
   const w = window.open('','_blank');
-  if(!w){ alert('Trình duyệt đã chặn popup! Vui lòng cho phép popup để in phiếu.'); return; }
-  w.document.write(buildWorksheetHTML());
+  if(!w){ alert('Trình duyệt đã chặn popup. Vui lòng cho phép popup để in phiếu.'); return; }
+  w.document.write(html);
   w.document.close();
-  setTimeout(()=>w.print(), 800);
+  setTimeout(()=>w.print(), 700);
+}
+
+function openWorksheetForSubj(){
+  const btn = document.getElementById('comp-ws-btn');
+  const subj = btn ? (btn.dataset.subj||'math') : 'math';
+  openWorksheet(subj);
+}
+
+function openWorksheet(subj){
+  const builders = { math:wsMath, english:wsEnglish, vietnamese:wsVietnamese, logic:wsLogic };
+  const fn = builders[subj] || wsMath;
+  _openWS(fn(P.name||'Bé yêu', new Date().toLocaleDateString('vi-VN'), P.stage||1));
 }
 
 function buildWorksheetHTML(){
