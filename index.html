@@ -509,7 +509,13 @@ button,[onclick]{touch-action:manipulation;cursor:pointer}
     <div class="streak-dots" id="streak-cal"></div>
   </div>
 
-  <button class="cta-btn" onclick="openWorksheet()">📄 In phiếu bài tập màu sắc</button>
+  <div style="padding:0 18px 4px;font-size:13.5px;font-weight:800;color:var(--text)">📄 In phiếu bài tập theo môn</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 18px 10px">
+    <button class="cta-btn" style="margin:0;font-size:13.5px;padding:14px 10px;background:linear-gradient(135deg,#FF6B6B,#FF9F43)" onclick="openWorksheet('math')">🔢 Phiếu Toán</button>
+    <button class="cta-btn" style="margin:0;font-size:13.5px;padding:14px 10px;background:linear-gradient(135deg,#51CF66,#20C997)" onclick="openWorksheet('english')">🌍 Phiếu Tiếng Anh</button>
+    <button class="cta-btn" style="margin:0;font-size:13.5px;padding:14px 10px;background:linear-gradient(135deg,#FFB700,#FF9F43)" onclick="openWorksheet('vietnamese')">🇻🇳 Phiếu Tiếng Việt</button>
+    <button class="cta-btn" style="margin:0;font-size:13.5px;padding:14px 10px;background:linear-gradient(135deg,#845EC2,#667eea)" onclick="openWorksheet('logic')">🧩 Phiếu Tư Duy</button>
+  </div>
   <button class="cta-btn sec" onclick="confirmReset()">🔄 Cài đặt lại hồ sơ bé</button>
   <div class="spacer"></div>
   <nav class="bnav">
@@ -1272,175 +1278,251 @@ function openWorksheet(subj){
   _openWS(fn(P.name||'Bé yêu', new Date().toLocaleDateString('vi-VN'), P.stage||1));
 }
 
-function buildWorksheetHTML(){
-  const name = P.name || 'Bé yêu';
-  const date = new Date().toLocaleDateString('vi-VN');
-  const stage = P.stage || 1;
-
-  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8">
-<title>Phiếu bài tập — ${name}</title>
-<style>
-  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800&display=swap');
+function _wsBase(title, color, name, date){
+  return `<style>
+  @import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;700;800;900&display=swap');
   *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:'Baloo 2',sans-serif;background:#fff;padding:24px;color:#2B3A4B;max-width:780px;margin:0 auto}
-  @page{size:A4;margin:18mm}
-  @media print{body{padding:0}button{display:none!important}.page-break{page-break-before:always}}
+  body{font-family:'Baloo 2',Segoe UI,sans-serif;background:#fff;padding:20px 28px 32px;color:#2B3A4B;max-width:820px;margin:0 auto;font-size:16px}
+  @page{size:A4;margin:14mm}
+  @media print{.no-print{display:none!important}.page-break{page-break-before:always}}
+  h1{font-size:28px;font-weight:900}
+  .hdr{background:linear-gradient(135deg,${color});border-radius:18px;padding:20px 26px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .hdr-info{flex:1}
+  .hdr-info h1{margin-bottom:3px}
+  .hdr-info p{font-size:13.5px;opacity:.88;margin-top:4px}
+  .hdr-emo{font-size:64px;line-height:1;margin-left:12px}
+  .section-title{font-size:17px;font-weight:900;margin:18px 0 12px;display:flex;align-items:center;gap:8px;border-left:5px solid;padding-left:12px;border-color:${color.split(',')[0].replace('linear-gradient(135deg,','')}}
+  .ans-blank{border-bottom:3px dotted #999;display:inline-block;min-width:60px;height:28px;vertical-align:bottom}
+  .star-row{display:flex;gap:14px;justify-content:center;margin-top:26px;padding-top:18px;border-top:2.5px dashed #ddd;font-size:40px}
+  .star-row span{opacity:.2}
+  .praise{text-align:center;font-size:14px;color:#999;margin-top:8px}
+  .print-btn{position:fixed;bottom:20px;right:20px;background:linear-gradient(135deg,${color});color:#fff;border:none;border-radius:50px;padding:13px 26px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 5px 20px rgba(0,0,0,.2)}
+  </style>
+  <div class="hdr"><div class="hdr-info"><h1>${title}</h1><p>Bé: <b>${name}</b> &nbsp;•&nbsp; ${date}</p></div><div class="hdr-emo">${{
+    'Phiếu Toán Học':'🔢','Phiếu Tiếng Anh':'🌍','Phiếu Tiếng Việt':'🇻🇳','Phiếu Tư Duy Logic':'🧩'
+  }[title]||'📚'}</div></div>
+  <button class="print-btn no-print" onclick="window.print()">🖨️ In phiếu</button>`;
+}
 
-  .header{background:linear-gradient(135deg,#667eea,#764ba2);border-radius:20px;padding:22px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-  .hdr-left h1{font-size:26px;font-weight:800}
-  .hdr-left p{font-size:13px;opacity:.85;margin-top:4px}
-  .hdr-right{text-align:right;font-size:13px;opacity:.85}
-  .mascot-big{font-size:60px;line-height:1}
-
-  .section{margin-bottom:26px}
-  .sec-hdr{display:flex;align-items:center;gap:10px;background:linear-gradient(90deg,#F093FB22,transparent);border-left:5px solid #F093FB;padding:10px 16px;border-radius:0 12px 12px 0;margin-bottom:16px}
-  .sec-hdr.math{border-color:#FF6B6B;background:linear-gradient(90deg,#FF6B6B22,transparent)}
-  .sec-hdr.en{border-color:#51CF66;background:linear-gradient(90deg,#51CF6622,transparent)}
-  .sec-hdr.vn{border-color:#FFB700;background:linear-gradient(90deg,#FFB70022,transparent)}
-  .sec-hdr.logic{border-color:#845EC2;background:linear-gradient(90deg,#845EC222,transparent)}
-  .sec-hdr h2{font-size:17px;font-weight:800}
-
-  /* Math exercises */
-  .math-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
-  .math-box{background:#FFF0F0;border-radius:16px;padding:16px;text-align:center;border:2px solid #FFD0D0}
-  .math-box .q{font-size:24px;font-weight:800;margin-bottom:10px}
-  .math-box .items{font-size:28px;letter-spacing:3px;display:block;margin-bottom:10px}
-  .ans-line{border-bottom:3px dotted #FF6B6B;width:60px;margin:0 auto;height:28px}
-
-  /* English */
-  .en-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  .en-card{background:#F0FFF4;border-radius:14px;padding:14px 10px;text-align:center;border:2px solid #C3F0CB}
-  .en-card .emoji{font-size:42px;display:block;margin-bottom:6px}
-  .en-card .word-line{border-bottom:2.5px dotted #51CF66;width:80%;margin:4px auto 0;height:24px}
-  .color-row{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
-  .color-task{display:flex;align-items:center;gap:10px;background:#F8FAFF;border-radius:12px;padding:10px 14px;border:2px solid #DDE8FF}
-  .color-circle{width:40px;height:40px;border-radius:50%;border:2px solid #ccc;flex-shrink:0}
-  .color-line{border-bottom:2px dotted #339AF0;flex:1;height:24px}
-
-  /* Vietnamese */
-  .vn-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  .letter-trace{background:#FFF8E1;border-radius:14px;padding:16px 10px;text-align:center;border:2px dashed #FFB700}
-  .letter-big{font-size:52px;font-weight:900;color:#FFB700;display:block;margin-bottom:6px}
-  .vn-word-row{display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
-  .vn-pair{display:flex;align-items:center;gap:10px;background:#FFFBF0;border-radius:12px;padding:10px 14px;border:2px solid #FFE082;min-width:180px;flex:1}
-  .vn-emoji{font-size:36px}
-  .vn-line{border-bottom:2px dotted #FFB700;flex:1;height:28px}
-
-  /* Logic */
-  .pat-row{display:flex;align-items:center;gap:10px;background:#F3F0FF;border-radius:14px;padding:16px;margin-bottom:12px;border:2px solid #D5C8FF;flex-wrap:wrap}
-  .pat-em{font-size:36px}
-  .pat-box-blank{width:52px;height:52px;border:3px dashed #845EC2;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;color:#ccc}
-  .odd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
-  .odd-card{background:#F3F0FF;border-radius:12px;padding:14px;text-align:center;border:2px solid #D5C8FF}
-  .odd-card .emoji{font-size:38px;display:block}
-  .odd-card .circle{width:24px;height:24px;border-radius:50%;border:2.5px solid #845EC2;margin:8px auto 0}
-
-  /* Stars row */
-  .stars-row{display:flex;justify-content:center;gap:18px;margin-top:24px;padding-top:18px;border-top:2px dashed #EEF0F5}
-  .star-rate{font-size:38px;opacity:.25;cursor:pointer}
-  .star-rate:hover{opacity:1}
-  .praise{text-align:center;font-size:14px;color:#8899AA;margin-top:10px}
-
-  .print-btn{position:fixed;bottom:24px;right:24px;background:linear-gradient(135deg,#667eea,#764ba2);color:#fff;border:none;border-radius:50px;padding:14px 28px;font-size:15px;font-weight:800;cursor:pointer;box-shadow:0 6px 24px rgba(102,126,234,.4)}
-</style></head><body>
-
-<div class="header">
-  <div class="hdr-left">
-    <h1>📚 Phiếu Bài Tập</h1>
-    <p>Bé: <b>${name}</b> &nbsp;•&nbsp; Ngày: ${date} &nbsp;•&nbsp; ${STAGE_NAMES[stage]}</p>
+function wsMath(name, date, stage){
+  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Phiếu Toán — ${name}</title>
+  ${_wsBase('Phiếu Toán Học','#FF6B6B,#FF9F43',name,date)}
+  <style>
+  .math-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:20px}
+  .math-card{background:#FFF5F5;border-radius:16px;padding:18px;text-align:center;border:2.5px solid #FFCCD0}
+  .math-card .q{font-size:22px;font-weight:900;margin-bottom:10px;color:#CC3333}
+  .math-card .items{font-size:34px;display:block;margin-bottom:12px;letter-spacing:4px}
+  .math-card .blank{border-bottom:3px dotted #FF6B6B;display:inline-block;width:56px;height:32px}
+  .count-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
+  .count-card{background:#FFF5F5;border-radius:16px;padding:16px 14px;border:2.5px solid #FFCCD0;display:flex;align-items:center;gap:14px}
+  .count-card .emojis{font-size:30px;line-height:1.5;flex:1}
+  .count-card .ans{text-align:center}
+  .count-card .ans-lbl{font-size:11px;color:#999;margin-bottom:4px}
+  </style>
+  </head><body>
+  <div class="section-title" style="border-color:#FF6B6B">🔢 Bài 1 — Đếm số lượng</div>
+  <div class="count-row">
+    <div class="count-card"><div class="emojis">🍎🍎🍎</div><div class="ans"><div class="ans-lbl">Có mấy quả?</div><div class="math-card" style="padding:6px;border-color:#FFCCD0;background:#FFF5F5"><div class="blank"></div></div></div></div>
+    <div class="count-card"><div class="emojis">🌸🌸🌸🌸🌸</div><div class="ans"><div class="ans-lbl">Có mấy bông?</div><div class="math-card" style="padding:6px;border-color:#FFCCD0;background:#FFF5F5"><div class="blank"></div></div></div></div>
+    <div class="count-card"><div class="emojis">⭐⭐⭐⭐⭐⭐⭐</div><div class="ans"><div class="ans-lbl">Có mấy sao?</div><div class="math-card" style="padding:6px;border-color:#FFCCD0;background:#FFF5F5"><div class="blank"></div></div></div></div>
+    <div class="count-card"><div class="emojis">🐝🐝🐝🐝</div><div class="ans"><div class="ans-lbl">Có mấy con ong?</div><div class="math-card" style="padding:6px;border-color:#FFCCD0;background:#FFF5F5"><div class="blank"></div></div></div></div>
   </div>
-  <div class="hdr-right">
-    <div class="mascot-big">🦊</div>
-    <div>Suplo Edu</div>
-  </div>
-</div>
 
-<!-- MATH -->
-<div class="section">
-  <div class="sec-hdr math"><span style="font-size:24px">🔢</span><h2>Toán học — Đếm & So sánh</h2></div>
+  <div class="section-title" style="border-color:#FF6B6B">➕ Bài 2 — Tính toán</div>
   <div class="math-grid">
-    <div class="math-box"><div class="q">Đếm 🍎</div><span class="items">🍎🍎🍎</span><div class="ans-line"></div></div>
-    <div class="math-box"><div class="q">2 + 3 = ?</div><span class="items">🌟🌟 + 🌟🌟🌟</span><div class="ans-line"></div></div>
-    <div class="math-box"><div class="q">Đếm 🐝</div><span class="items">🐝🐝🐝🐝🐝🐝</span><div class="ans-line"></div></div>
-    <div class="math-box"><div class="q">1 + 4 = ?</div><span class="items">🎈 + 🎈🎈🎈🎈</span><div class="ans-line"></div></div>
-    <div class="math-box"><div class="q">Nhiều hơn?</div><span class="items" style="font-size:16px">A: 🐟🐟🐟<br>B: 🐟🐟🐟🐟🐟</span><div class="ans-line"></div></div>
-    <div class="math-box"><div class="q">3 + ? = 5</div><span class="items">🌸🌸🌸 + ?</span><div class="ans-line"></div></div>
+    <div class="math-card"><div class="q">2 + 3 =</div><span class="items">🍓🍓 + 🍓🍓🍓</span><div class="blank"></div></div>
+    <div class="math-card"><div class="q">1 + 4 =</div><span class="items">🌟 + 🌟🌟🌟🌟</span><div class="blank"></div></div>
+    <div class="math-card"><div class="q">3 + 2 =</div><span class="items">🎈🎈🎈 + 🎈🎈</span><div class="blank"></div></div>
+    <div class="math-card"><div class="q">4 + 1 =</div><span class="items">🐟🐟🐟🐟 + 🐟</span><div class="blank"></div></div>
+    <div class="math-card"><div class="q">2 + ? = 5</div><span class="items">🌙🌙 + ???</span><div class="blank"></div></div>
+    <div class="math-card"><div class="q">3 + ? = 5</div><span class="items">🦋🦋🦋 + ???</span><div class="blank"></div></div>
   </div>
-</div>
 
-<!-- ENGLISH -->
-<div class="section">
-  <div class="sec-hdr en"><span style="font-size:24px">🌍</span><h2>English — Animals & Colors</h2></div>
+  <div class="section-title" style="border-color:#FF6B6B">⚖️ Bài 3 — So sánh (Khoanh tròn đáp án đúng)</div>
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px">
+    <div class="math-card" style="font-size:15px">
+      <div class="q">Nhóm nào NHIỀU hơn?</div>
+      <div style="display:flex;gap:16px;justify-content:center;font-size:28px;margin:10px 0">
+        <div style="text-align:center"><div>🐶🐶🐶</div><div style="font-size:13px;font-weight:800;margin-top:4px">Nhóm A</div></div>
+        <div style="text-align:center"><div>🐶🐶🐶🐶🐶</div><div style="font-size:13px;font-weight:800;margin-top:4px">Nhóm B</div></div>
+      </div>
+      <div style="display:flex;gap:20px;justify-content:center;font-weight:800;font-size:14px">
+        <span>◯ Nhóm A</span><span>◯ Nhóm B</span><span>◯ Bằng nhau</span>
+      </div>
+    </div>
+    <div class="math-card" style="font-size:15px">
+      <div class="q">Nhóm nào ÍT hơn?</div>
+      <div style="display:flex;gap:16px;justify-content:center;font-size:28px;margin:10px 0">
+        <div style="text-align:center"><div>🌺🌺🌺🌺</div><div style="font-size:13px;font-weight:800;margin-top:4px">Nhóm A</div></div>
+        <div style="text-align:center"><div>🌺🌺</div><div style="font-size:13px;font-weight:800;margin-top:4px">Nhóm B</div></div>
+      </div>
+      <div style="display:flex;gap:20px;justify-content:center;font-weight:800;font-size:14px">
+        <span>◯ Nhóm A</span><span>◯ Nhóm B</span><span>◯ Bằng nhau</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="star-row"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <div class="praise">Ba/Mẹ chấm điểm cho bé nhé! ⭐</div>
+  </body></html>`;
+}
+
+function wsEnglish(name, date, stage){
+  return `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>English Worksheet — ${name}</title>
+  ${_wsBase('Phiếu Tiếng Anh','#51CF66,#20C997',name,date)}
+  <style>
+  .en-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .en-card{background:#F0FFF4;border-radius:16px;padding:16px 10px;text-align:center;border:2.5px solid #B2F2CC}
+  .en-card .big-emo{font-size:56px;display:block;margin-bottom:8px;line-height:1.1}
+  .en-card .word-blank{border-bottom:3px dotted #51CF66;display:block;width:80%;margin:6px auto 0;height:30px}
+  .color-row{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .color-card{background:#F0FFF4;border-radius:14px;padding:14px;text-align:center;border:2.5px solid #B2F2CC}
+  .color-circle{width:60px;height:60px;border-radius:50%;margin:0 auto 10px;border:3px solid rgba(0,0,0,.1)}
+  .color-blank{border-bottom:3px dotted #51CF66;display:block;height:28px;width:90%;margin:0 auto}
+  .body-qa{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:18px}
+  .qa-card{background:#F0FFF4;border-radius:14px;padding:14px 16px;border:2.5px solid #B2F2CC}
+  .qa-q{font-size:14px;font-weight:800;margin-bottom:8px;color:#1A7340}
+  .qa-opts{display:flex;flex-wrap:wrap;gap:8px}
+  .qa-opt{background:#fff;border:2px solid #B2F2CC;border-radius:50px;padding:5px 13px;font-size:13.5px;font-weight:700}
+  </style>
+  </head><body>
+  <div class="section-title" style="border-color:#51CF66">🐾 Part 1 — Animals (Write the name)</div>
   <div class="en-grid">
-    <div class="en-card"><span class="emoji">🐱</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
-    <div class="en-card"><span class="emoji">🐶</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
-    <div class="en-card"><span class="emoji">🐘</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
-    <div class="en-card"><span class="emoji">🦁</span><div style="font-size:11px;color:#888;margin-bottom:4px">Write the name:</div><div class="word-line"></div></div>
+    <div class="en-card"><span class="big-emo">🐱</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🐶</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🐘</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🦁</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🐧</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🦊</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🐸</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
+    <div class="en-card"><span class="big-emo">🦋</span><div style="font-size:12px;color:#888;margin-bottom:4px">Write:</div><span class="word-blank"></span></div>
   </div>
-  <div style="font-size:13px;font-weight:700;color:#555;margin:14px 0 8px">🎨 Color the circles and write the color name:</div>
+
+  <div class="section-title" style="border-color:#51CF66">🎨 Part 2 — Colors (Write the color name)</div>
   <div class="color-row">
-    <div class="color-task"><div class="color-circle" style="background:#FF0000"></div><div class="color-line"></div></div>
-    <div class="color-task"><div class="color-circle" style="background:#339AF0"></div><div class="color-line"></div></div>
-    <div class="color-task"><div class="color-circle" style="background:#51CF66"></div><div class="color-line"></div></div>
-    <div class="color-task"><div class="color-circle" style="background:#FFE66D"></div><div class="color-line"></div></div>
+    <div class="color-card"><div class="color-circle" style="background:#FF0000"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#339AF0"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#51CF66"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#FFE66D"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#F06595"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#845EC2"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#FF9F43"></div><span class="color-blank"></span></div>
+    <div class="color-card"><div class="color-circle" style="background:#2B3A4B"></div><span class="color-blank"></span></div>
   </div>
-</div>
 
-<!-- VIETNAMESE -->
-<div class="section page-break">
-  <div class="sec-hdr vn"><span style="font-size:24px">🇻🇳</span><h2>Tiếng Việt — Chữ cái & Từ ngữ</h2></div>
-  <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:10px">✏️ Tô và viết lại chữ cái:</div>
-  <div class="vn-grid">
-    <div class="letter-trace"><span class="letter-big">A</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
-    <div class="letter-trace"><span class="letter-big">B</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
-    <div class="letter-trace"><span class="letter-big">M</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
-    <div class="letter-trace"><span class="letter-big">H</span><div style="font-size:11px;color:#aaa">Viết lại: ___</div></div>
+  <div class="section-title" style="border-color:#51CF66">❓ Part 3 — Choose the right answer</div>
+  <div class="body-qa">
+    <div class="qa-card"><div class="qa-q">Which one can FLY? ✈️</div><div class="qa-opts"><span class="qa-opt">◯ Fish 🐟</span><span class="qa-opt">◯ Bird 🐦</span><span class="qa-opt">◯ Dog 🐶</span></div></div>
+    <div class="qa-card"><div class="qa-q">What sound does a cat make? 🔊</div><div class="qa-opts"><span class="qa-opt">◯ Woof</span><span class="qa-opt">◯ Meow</span><span class="qa-opt">◯ Moo</span></div></div>
+    <div class="qa-card"><div class="qa-q">How many legs does a dog have? 🐕</div><div class="qa-opts"><span class="qa-opt">◯ 2 legs</span><span class="qa-opt">◯ 4 legs</span><span class="qa-opt">◯ 6 legs</span></div></div>
+    <div class="qa-card"><div class="qa-q">Where do fish live? 🌊</div><div class="qa-opts"><span class="qa-opt">◯ Forest</span><span class="qa-opt">◯ Sky</span><span class="qa-opt">◯ Water</span></div></div>
   </div>
-  <div style="font-size:13px;font-weight:700;color:#555;margin:14px 0 8px">📝 Nhìn tranh — viết tên:</div>
-  <div class="vn-word-row">
-    <div class="vn-pair"><span class="vn-emoji">🌸</span><div class="vn-line"></div></div>
-    <div class="vn-pair"><span class="vn-emoji">🐱</span><div class="vn-line"></div></div>
-    <div class="vn-pair"><span class="vn-emoji">☀️</span><div class="vn-line"></div></div>
-    <div class="vn-pair"><span class="vn-emoji">🍎</span><div class="vn-line"></div></div>
-  </div>
-</div>
 
-<!-- LOGIC -->
-<div class="section">
-  <div class="sec-hdr logic"><span style="font-size:24px">🧩</span><h2>Tư duy Logic — Quy luật & Tìm khác biệt</h2></div>
-  <div style="font-size:13px;font-weight:700;color:#555;margin-bottom:10px">🔍 Tìm hình tiếp theo:</div>
-  <div class="pat-row">
-    <span class="pat-em">🔴</span><span class="pat-em">🔵</span><span class="pat-em">🔴</span><span class="pat-em">🔵</span><span class="pat-em">🔴</span>
-    <span style="font-size:24px;font-weight:900;color:#845EC2">→</span>
-    <div class="pat-box-blank">❓</div>
+  <div class="star-row"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <div class="praise">Great job! ⭐ Ba/Mẹ chấm điểm cho bé!</div>
+  </body></html>`;
+}
+
+function wsVietnamese(name, date, stage){
+  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Phiếu Tiếng Việt — ${name}</title>
+  ${_wsBase('Phiếu Tiếng Việt','#FFB700,#FF9F43',name,date)}
+  <style>
+  .letter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .letter-card{background:#FFF8E1;border-radius:16px;padding:16px;text-align:center;border:2.5px dashed #FFD43B}
+  .letter-big{font-size:58px;font-weight:900;color:#E67700;display:block;margin-bottom:6px;line-height:1}
+  .letter-small{font-size:40px;color:#FFB700;display:block;margin-bottom:8px}
+  .trace-box{border:2px dashed #FFD43B;border-radius:10px;height:40px;width:90%;margin:0 auto}
+  .word-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+  .word-card{background:#FFF8E1;border-radius:14px;padding:14px;display:flex;align-items:center;gap:14px;border:2.5px solid #FFD43B}
+  .word-emo{font-size:48px;flex-shrink:0;line-height:1}
+  .word-line{flex:1;border-bottom:3px dotted #FFB700;height:32px}
+  .sent-card{background:#FFF8E1;border-radius:14px;padding:14px 16px;margin-bottom:12px;border:2.5px solid #FFD43B}
+  .sent-q{font-size:15px;font-weight:800;color:#964B00;margin-bottom:10px}
+  .sent-opts{display:flex;flex-wrap:wrap;gap:8px}
+  .sent-opt{background:#fff;border:2px solid #FFD43B;border-radius:50px;padding:5px 13px;font-size:13.5px;font-weight:700}
+  </style>
+  </head><body>
+  <div class="section-title" style="border-color:#FFB700">✏️ Bài 1 — Nhận biết & tô chữ cái</div>
+  <div class="letter-grid">
+    <div class="letter-card"><span class="letter-big">A</span><span class="letter-small">a</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">B</span><span class="letter-small">b</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">M</span><span class="letter-small">m</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">H</span><span class="letter-small">h</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">C</span><span class="letter-small">c</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">D</span><span class="letter-small">d</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">Ô</span><span class="letter-small">ô</span><div class="trace-box"></div></div>
+    <div class="letter-card"><span class="letter-big">Ơ</span><span class="letter-small">ơ</span><div class="trace-box"></div></div>
   </div>
-  <div class="pat-row">
-    <span class="pat-em">🌟</span><span class="pat-em">🌙</span><span class="pat-em">🌟</span><span class="pat-em">🌙</span><span class="pat-em">🌟</span>
-    <span style="font-size:24px;font-weight:900;color:#845EC2">→</span>
-    <div class="pat-box-blank">❓</div>
+
+  <div class="section-title" style="border-color:#FFB700">🖼️ Bài 2 — Nhìn tranh, viết tên</div>
+  <div class="word-row">
+    <div class="word-card"><span class="word-emo">🌸</span><div class="word-line"></div></div>
+    <div class="word-card"><span class="word-emo">🐱</span><div class="word-line"></div></div>
+    <div class="word-card"><span class="word-emo">☀️</span><div class="word-line"></div></div>
+    <div class="word-card"><span class="word-emo">🍎</span><div class="word-line"></div></div>
+    <div class="word-card"><span class="word-emo">🏠</span><div class="word-line"></div></div>
+    <div class="word-card"><span class="word-emo">🌙</span><div class="word-line"></div></div>
   </div>
-  <div style="font-size:13px;font-weight:700;color:#555;margin:14px 0 10px">🔵 Khoanh tròn thứ KHÁC với các thứ còn lại:</div>
+
+  <div class="section-title" style="border-color:#FFB700">🔤 Bài 3 — Chọn đáp án đúng</div>
+  <div class="sent-card"><div class="sent-q">Từ nào bắt đầu bằng chữ "H"?</div><div class="sent-opts"><span class="sent-opt">◯ 🐶 Chó</span><span class="sent-opt">◯ 🌸 Hoa</span><span class="sent-opt">◯ 🍎 Táo</span><span class="sent-opt">◯ 🌙 Trăng</span></div></div>
+  <div class="sent-card"><div class="sent-q">Từ nào chỉ màu sắc?</div><div class="sent-opts"><span class="sent-opt">◯ 🏠 Nhà</span><span class="sent-opt">◯ 🔴 Đỏ</span><span class="sent-opt">◯ 🐶 Chó</span><span class="sent-opt">◯ 🍎 Táo</span></div></div>
+  <div class="sent-card"><div class="sent-q">Đây là con gì?&nbsp; 🐱</div><div class="sent-opts"><span class="sent-opt">◯ Con chó</span><span class="sent-opt">◯ Con mèo</span><span class="sent-opt">◯ Con bò</span><span class="sent-opt">◯ Con gà</span></div></div>
+
+  <div class="star-row"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <div class="praise">Ba/Mẹ chấm điểm cho bé nhé! ⭐</div>
+  </body></html>`;
+}
+
+function wsLogic(name, date, stage){
+  return `<!DOCTYPE html><html lang="vi"><head><meta charset="UTF-8"><title>Phiếu Tư Duy — ${name}</title>
+  ${_wsBase('Phiếu Tư Duy Logic','#845EC2,#667eea',name,date)}
+  <style>
+  .pat-row{display:flex;align-items:center;gap:12px;flex-wrap:wrap;background:#F3F0FF;border-radius:16px;padding:16px 18px;margin-bottom:14px;border:2.5px solid #C5B8FF}
+  .pat-em{font-size:40px;line-height:1}
+  .pat-arrow{font-size:24px;font-weight:900;color:#845EC2;margin:0 4px}
+  .pat-blank{width:56px;height:56px;border:3px dashed #845EC2;border-radius:12px;display:inline-flex;align-items:center;justify-content:center;font-size:22px;color:#ccc;flex-shrink:0}
+  .odd-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:20px}
+  .odd-card{background:#F3F0FF;border-radius:14px;padding:16px;text-align:center;border:2.5px solid #C5B8FF}
+  .odd-card .em{font-size:46px;display:block;margin-bottom:8px;line-height:1.1}
+  .odd-card .circle{width:28px;height:28px;border-radius:50%;border:2.5px solid #845EC2;margin:0 auto}
+  .num-row{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:20px}
+  .num-card{background:#F3F0FF;border-radius:14px;padding:14px 16px;border:2.5px solid #C5B8FF}
+  .num-q{font-size:15px;font-weight:800;color:#5A3F9E;margin-bottom:10px}
+  .num-seq{font-size:26px;letter-spacing:8px;display:block;margin-bottom:8px}
+  </style>
+  </head><body>
+  <div class="section-title" style="border-color:#845EC2">🔍 Bài 1 — Tìm hình tiếp theo trong dãy</div>
+  <div class="pat-row"><span class="pat-em">🔴</span><span class="pat-em">🔵</span><span class="pat-em">🔴</span><span class="pat-em">🔵</span><span class="pat-em">🔴</span><span class="pat-arrow">→</span><div class="pat-blank">❓</div></div>
+  <div class="pat-row"><span class="pat-em">🌟</span><span class="pat-em">🌙</span><span class="pat-em">🌟</span><span class="pat-em">🌙</span><span class="pat-em">🌟</span><span class="pat-arrow">→</span><div class="pat-blank">❓</div></div>
+  <div class="pat-row"><span class="pat-em">🟥</span><span class="pat-em">🟦</span><span class="pat-em">🟦</span><span class="pat-em">🟥</span><span class="pat-em">🟦</span><span class="pat-em">🟦</span><span class="pat-arrow">→</span><div class="pat-blank">❓</div></div>
+  <div class="pat-row"><span class="pat-em">🔺</span><span class="pat-em">🔺</span><span class="pat-em">🔷</span><span class="pat-em">🔺</span><span class="pat-em">🔺</span><span class="pat-em">🔷</span><span class="pat-arrow">→</span><div class="pat-blank">❓</div></div>
+
+  <div class="section-title" style="border-color:#845EC2">🔵 Bài 2 — Khoanh tròn thứ KHÁC biệt</div>
   <div class="odd-grid">
-    <div class="odd-card"><span class="emoji">🍎</span><div class="circle"></div></div>
-    <div class="odd-card"><span class="emoji">🍊</span><div class="circle"></div></div>
-    <div class="odd-card"><span class="emoji">🚗</span><div class="circle"></div></div>
-    <div class="odd-card"><span class="emoji">🍇</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🍎</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🍊</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🚗</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🍇</span><div class="circle"></div></div>
   </div>
-</div>
+  <div class="odd-grid">
+    <div class="odd-card"><span class="em">🐠</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🦁</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🦑</span><div class="circle"></div></div>
+    <div class="odd-card"><span class="em">🐢</span><div class="circle"></div></div>
+  </div>
 
-<!-- STARS ROW -->
-<div class="stars-row">
-  <span class="star-rate">⭐</span>
-  <span class="star-rate">⭐</span>
-  <span class="star-rate">⭐</span>
-  <span class="star-rate">⭐</span>
-  <span class="star-rate">⭐</span>
-</div>
-<div class="praise">Ba/Mẹ đánh giá: Chấm sao cho bé 🌟</div>
+  <div class="section-title" style="border-color:#845EC2">🔢 Bài 3 — Điền số còn thiếu</div>
+  <div class="num-row">
+    <div class="num-card"><div class="num-q">1, 2, 3, 4, <span class="ans-blank" style="border-color:#845EC2;width:40px"></span></div></div>
+    <div class="num-card"><div class="num-q">2, 4, 6, <span class="ans-blank" style="border-color:#845EC2;width:40px"></span>, 10</div></div>
+    <div class="num-card"><div class="num-q">5, 10, 15, <span class="ans-blank" style="border-color:#845EC2;width:40px"></span>, 25</div></div>
+    <div class="num-card"><div class="num-q">10, 9, 8, <span class="ans-blank" style="border-color:#845EC2;width:40px"></span>, 6</div></div>
+  </div>
 
-<button class="print-btn" onclick="window.print()">🖨️ In phiếu bài tập</button>
-
-</body></html>`;
+  <div class="star-row"><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span><span>⭐</span></div>
+  <div class="praise">Ba/Mẹ chấm điểm cho bé nhé! ⭐</div>
+  </body></html>`;
 }
 
 // ─────────────────────────────────────────────
